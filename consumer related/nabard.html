@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NABARD Loan & Scheme Checker</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        secondary: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Lato', 'ui-sans-serif', 'system-ui'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.04)',
+                        'hard': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- SweetAlert2 for beautiful alerts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.4.8/sweetalert2.all.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .custom-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .app-header {
+            background: linear-gradient(135deg, #166534, #22c55e);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem 0.75rem 0 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .form-card:hover {
+            transform: translateY(-0.25rem);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .custom-input {
+            border: 2px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+        
+        .custom-input:focus {
+            border-color: #86efac;
+            box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.3);
+            outline: none;
+        }
+        
+        .custom-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+        
+        .custom-button {
+            background: #166534;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .custom-button:hover {
+            background: #14532d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(21, 83, 45, 0.2);
+        }
+        
+        .custom-button:active {
+            transform: translateY(0);
+        }
+        
+        .result-section {
+            display: none;
+            background: white;
+            border-radius: 0.75rem;
+            margin-top: 2rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .scheme-card {
+            border-left: 4px solid #22c55e;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .scheme-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-steps {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2.5rem;
+        }
+        
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+        
+        .step {
+            position: relative;
+            z-index: 2;
+            background: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e2e8f0;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+        
+        .step.active {
+            border-color: #166534;
+            background: #166534;
+            color: white;
+        }
+        
+        .step-label {
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+        
+        .custom-badge {
+            background: #f59e0b;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Chatbot */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+        
+        .chatbot-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #166534;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+        
+        .chatbot-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chatbot-panel {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: none;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .chatbot-header {
+            background: #166534;
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chatbot-close {
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        
+        .chatbot-close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .chatbot-messages {
+            height: 340px;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        
+        .chat-message {
+            margin-bottom: 1rem;
+            display: flex;
+        }
+        
+        .user-message {
+            justify-content: flex-end;
+        }
+        
+        .bot-message {
+            justify-content: flex-start;
+        }
+        
+        .message-content {
+            padding: 0.75rem 1rem;
+            border-radius: 1.25rem;
+            max-width: 80%;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .user-message .message-content {
+            background: #dcfce7;
+            color: #166534;
+            border-bottom-right-radius: 0.25rem;
+        }
+        
+        .bot-message .message-content {
+            background: #f1f5f9;
+            color: #1e293b;
+            border-bottom-left-radius: 0.25rem;
+        }
+        
+        .chatbot-input {
+            display: flex;
+            padding: 0.75rem;
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+        
+        .chatbot-input input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 1.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        
+        .chatbot-input input:focus {
+            border-color: #86efac;
+        }
+        
+        .send-btn {
+            background: #166534;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .send-btn:hover {
+            background: #14532d;
+            transform: scale(1.05);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .custom-container {
+                padding: 1rem;
+            }
+            
+            .app-header {
+                padding: 1.25rem;
+            }
+            
+            .chatbot-panel {
+                width: 300px;
+                right: -0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Selector -->
+    <div class="fixed top-5 right-5 z-50">
+        <select id="languageSelect" class="custom-input text-sm py-1">
+            <option value="ta">தமிழ்</option>
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+        </select>
+    </div>
+
+    <div class="custom-container mt-12">
+        <div class="form-card">
+            <div class="app-header">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold" id="mainTitle">நபார்டு கடன் & திட்ட தகுதி சேகரிப்பு</h1>
+                        <p class="text-sm opacity-90" id="subTitle">உங்கள் விவசாய தேவைகளுக்கான நிதி உதவி தீர்வுகள்</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 p-2 rounded-lg">
+                        <img src="https://via.placeholder.com/80/166534/FFFFFF?text=NABARD" alt="NABARD Logo" class="h-12 rounded">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <!-- Progress Steps -->
+                <div class="progress-steps mb-8">
+                    <div class="step active">
+                        1
+                        <div class="step-label" id="step1Label">விவரங்கள்</div>
+                    </div>
+                    <div class="step">
+                        2
+                        <div class="step-label" id="step2Label">தகுதி</div>
+                    </div>
+                    <div class="step">
+                        3
+                        <div class="step-label" id="step3Label">திட்டங்கள்</div>
+                    </div>
+                    <div class="step">
+                        4
+                        <div class="step-label" id="step4Label">விண்ணப்பம்</div>
+                    </div>
+                </div>
+                
+                <!-- Step 1: User Details -->
+                <div id="step1Content" class="tab-content active">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="farmerId" class="custom-label" id="farmerIdLabel">
+                                <i class="fas fa-id-card mr-2 text-primary-600"></i> விவசாயி அட்டை எண்
+                            </label>
+                            <input type="text" id="farmerId" class="custom-input w-full" placeholder="உங்கள் Aadhaar/நபார்டு ID உள்ளிடவும்">
+                        </div>
+                        
+                        <div>
+                            <label for="farmerName" class="custom-label" id="farmerNameLabel">
+                                <i class="fas fa-user mr-2 text-primary-600"></i> விவசாயி பெயர்
+                            </label>
+                            <input type="text" id="farmerName" class="custom-input w-full" placeholder="உங்கள் முழு பெயரை உள்ளிடவும்">
+                        </div>
+                        
+                        <div>
+                            <label for="landSize" class="custom-label" id="landSizeLabel">
+                                <i class="fas fa-ruler-combined mr-2 text-primary-600"></i> நிலத்தின் அளவு (ஏக்கர்)
+                            </label>
+                            <input type="number" id="landSize" class="custom-input w-full" placeholder="உங்கள் நிலத்தின் அளவை உள்ளிடவும்">
+                        </div>
+                        
+                        <div>
+                            <label for="cropType" class="custom-label" id="cropTypeLabel">
+                                <i class="fas fa-seedling mr-2 text-primary-600"></i> பயிர் வகை
+                            </label>
+                            <select id="cropType" class="custom-input w-full">
+                                <option value="">தேர்ந்தெடுக்கவும்</option>
+                                <option value="rice">நெல்</option>
+                                <option value="wheat">கோதுமை</option>
+                                <option value="sugarcane">கரும்பு</option>
+                                <option value="cotton">பருத்தி</option>
+                                <option value="vegetables">காய்கறிகள்</option>
+                                <option value="fruits">பழங்கள்</option>
+                                <option value="pulses">பருப்பு வகைகள்</option>
+                                <option value="other">மற்றவை</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="district" class="custom-label" id="districtLabel">
+                                <i class="fas fa-map-marker-alt mr-2 text-primary-600"></i> மாவட்டம்
+                            </label>
+                            <select id="district" class="custom-input w-full">
+                                <option value="">தேர்ந்தெடுக்கவும்</option>
+                                <option value="chennai">சென்னை</option>
+                                <option value="coimbatore">கோயம்புத்தூர்</option>
+                                <option value="madurai">மதுரை</option>
+                                <option value="tiruchy">திருச்சி</option>
+                                <option value="salem">சேலம்</option>
+                                <option value="tirunelveli">திருநெல்வேலி</option>
+                                <option value="erode">ஈரோடு</option>
+                                <option value="other">மற்றவை</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="loanPurpose" class="custom-label" id="loanPurposeLabel">
+                                <i class="fas fa-money-bill-wave mr-2 text-primary-600"></i> கடன் நோக்கம்
+                            </label>
+                            <select id="loanPurpose" class="custom-input w-full">
+                                <option value="">தேர்ந்தெடுக்கவும்</option>
+                                <option value="equipment">விவசாய உபகரணங்கள்</option>
+                                <option value="seeds">விதைகள் மற்றும் உரங்கள்</option>
+                                <option value="irrigation">நீர்ப்பாசன அமைப்புகள்</option>
+                                <option value="storage">சேமிப்பு வசதிகள்</option>
+                                <option value="processing">மதிப்பு கூட்டு செயலாக்கம்</option>
+                                <option value="other">மற்றவை</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="loanAmount" class="custom-label" id="loanAmountLabel">
+                                <i class="fas fa-rupee-sign mr-2 text-primary-600"></i> தேவையான கடன் தொகை (₹)
+                            </label>
+                            <input type="number" id="loanAmount" class="custom-input w-full" placeholder="தேவையான தொகையை உள்ளிடவும்">
+                        </div>
+                        
+                        <div>
+                            <label for="mobileNumber" class="custom-label" id="mobileNumberLabel">
+                                <i class="fas fa-phone mr-2 text-primary-600"></i> தொடர்பு எண்
+                            </label>
+                            <input type="tel" id="mobileNumber" class="custom-input w-full" placeholder="உங்கள் மொபைல் எண்ணை உள்ளிடவும்">
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 flex flex-col md:flex-row justify-between items-center">
+                        <div class="text-sm mb-4 md:mb-0 text-gray-500">
+                            <span class="text-red-500">*</span> <span id="requiredFieldsText">அனைத்து விவரங்களும் தேவை</span>
+                        </div>
+                        <button id="checkEligibility" class="custom-button">
+                            <i class="fas fa-search mr-2"></i> <span id="checkEligibilityText">தகுதியை சரிபார்க்க</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Eligibility Results -->
+                <div id="step2Content" class="tab-content">
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                            <i class="fas fa-check-circle text-3xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-green-700 mb-2" id="eligibilityTitle">வாழ்த்துக்கள்! நீங்கள் தகுதி பெற்றுள்ளீர்கள்</h3>
+                        <p class="text-gray-600 max-w-md mx-auto" id="eligibilitySubtitle">உங்கள் விவரங்களின் அடிப்படையில், பின்வரும் திட்டங்களுக்கு நீங்கள் தகுதி பெற்றுள்ளீர்கள்</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-lg border border-gray-100 shadow-sm">
+                            <h4 class="font-bold mb-3 text-gray-800" id="loanEligibilityTitle">கடன் தகுதி</h4>
+                            <div class="flex items-center mb-4">
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 85%"></div>
+                                </div>
+                                <span class="ml-3 font-bold text-green-600">85%</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-1" id="maxLoanText">அதிகபட்ச தகுதியான கடன்:</p>
+                            <p class="text-2xl font-bold text-green-700 mb-3">₹ 5,00,000</p>
+                            <p class="text-sm text-gray-600" id="interestRateText">வட்டி விகிதம்: 4% - 7%</p>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-lg border border-gray-100 shadow-sm">
+                            <h4 class="font-bold mb-3 text-gray-800" id="subsidyEligibilityTitle">மானியத் தகுதி</h4>
+                            <div class="flex items-center mb-4">
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 60%"></div>
+                                </div>
+                                <span class="ml-3 font-bold text-blue-600">60%</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-1" id="maxSubsidyText">அதிகபட்ச தகுதியான மானியம்:</p>
+                            <p class="text-2xl font-bold text-blue-700 mb-3">₹ 1,50,000</p>
+                            <p class="text-sm text-gray-600" id="subsidyConditionText">உபகரணங்கள் மற்றும் நீர்ப்பாசனத்திற்கு</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row justify-between items-center mt-8">
+                        <button id="backToStep1" class="custom-button bg-gray-500 hover:bg-gray-600 mb-4 md:mb-0">
+                            <i class="fas fa-arrow-left mr-2"></i> <span id="backText">திரும்பிச் செல்க</span>
+                        </button>
+                        <button id="viewSchemes" class="custom-button">
+                            <i class="fas fa-list-ul mr-2"></i> <span id="viewSchemesText">திட்டங்களைக் காண</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Available Schemes -->
+                <div id="step3Content" class="tab-content">
+                    <h3 class="text-xl font-bold mb-6 text-gray-800" id="availableSchemesTitle">உங்களுக்கான திட்டங்கள்</h3>
+                    
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="scheme-card">
+                            <div class="flex flex-col md:flex-row justify-between">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">கிசான் கிரெடிட் கார்டு (KCC)</h4>
+                                    <p class="text-sm text-gray-600 mt-1">குறைந்த வட்டியில் குறுகிய கால கடன் வசதி</p>
+                                    <div class="mt-3 space-x-2">
+                                        <span class="custom-badge bg-green-600"><i class="fas fa-percentage mr-1"></i> 4% வட்டி</span>
+                                        <span class="custom-badge bg-blue-600"><i class="fas fa-calendar-alt mr-1"></i> 3 ஆண்டுகள்</span>
+                                    </div>
+                                </div>
+                                <div class="mt-4 md:mt-0 md:ml-4">
+                                    <button class="custom-button bg-blue-600 hover:bg-blue-700 text-sm px-4 py-2">
+                                        <span id="applyNowText">இப்போது விண்ணப்பிக்கவும்</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="scheme-card">
+                            <div class="flex flex-col md:flex-row justify-between">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">சூரிய சக்தி நீர்ப்பாசன திட்டம்</h4>
+                                    <p class="text-sm text-gray-600 mt-1">சோலார் பம்ப்களுக்கான மானியம்</p>
+                                    <div class="mt-3 space-x-2">
+                                        <span class="custom-badge bg-green-600"><i class="fas fa-percentage mr-1"></i> 30% மானியம்</span>
+                                        <span class="custom-badge bg-purple-600"><i class="fas fa-rupee-sign mr-1"></i> ₹1,00,000 வரை</span>
+                                    </div>
+                                </div>
+                                <div class="mt-4 md:mt-0 md:ml-4">
+                                    <button class="custom-button bg-blue-600 hover:bg-blue-700 text-sm px-4 py-2">
+                                        <span>இப்போது விண்ணப்பிக்கவும்</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="scheme-card">
+                            <div class="flex flex-col md:flex-row justify-between">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">விவசாய இயந்திரங்கள் திட்டம்</h4>
+                                    <p class="text-sm text-gray-600 mt-1">நவீன விவசாய இயந்திரங்கள் வாங்க உதவி</p>
+                                    <div class="mt-3 space-x-2">
+                                        <span class="custom-badge bg-green-600"><i class="fas fa-percentage mr-1"></i> 40% மானியம்</span>
+                                        <span class="custom-badge bg-yellow-600"><i class="fas fa-percent mr-1"></i> குறைந்த வட்டி</span>
+                                    </div>
+                                </div>
+                                <div class="mt-4 md:mt-0 md:ml-4">
+                                    <button class="custom-button bg-blue-600 hover:bg-blue-700 text-sm px-4 py-2">
+                                        <span>இப்போது விண்ணப்பிக்கவும்</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                        <div class="flex">
+                            <div class="flex-shrink-0 text-yellow-500">
+                                <i class="fas fa-lightbulb mt-1"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-yellow-800" id="recommendationText">
+                                    <span class="font-semibold">பரிந்துரை:</span> உங்கள் தேவைக்கேற்ப, சூரிய சக்தி நீர்ப்பாசன திட்டம் சிறந்த தேர்வாக இருக்கும். இது குறைந்த செலவில் நீர்ப்பாசனத்திற்கு உதவும்.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row justify-between items-center mt-8">
+                        <button id="backToStep2" class="custom-button bg-gray-500 hover:bg-gray-600 mb-4 md:mb-0">
+                            <i class="fas fa-arrow-left mr-2"></i> <span id="backText2">திரும்பிச் செல்க</span>
+                        </button>
+                        <button id="goToApply" class="custom-button">
+                            <i class="fas fa-file-alt mr-2"></i> <span id="applyText">விண்ணப்பிக்க</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Application Form -->
+                <div id="step4Content" class="tab-content">
+                    <h3 class="text-xl font-bold mb-6 text-gray-800" id="applicationFormTitle">விண்ணப்ப படிவம்</h3>
+                    
+                    <div class="bg-green-50 border border-green-100 p-4 rounded-lg mb-6">
+                        <h4 class="font-bold mb-2 text-gray-800" id="selectedSchemeLabel">தேர்ந்தெடுக்கப்பட்ட திட்டம்:</h4>
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 text-green-600">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="font-medium text-gray-800">சூரிய சக்தி நீர்ப்பாசன திட்டம்</p>
+                                <p class="text-sm text-gray-600">30% மானியம், அதிகபட்சம் ₹1,00,000 வரை</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="bankName" class="custom-label" id="bankNameLabel">
+                                <i class="fas fa-university mr-2 text-primary-600"></i> வங்கி பெயர்
+                            </label>
+                            <select id="bankName" class="custom-input w-full">
+                                <option value="">தேர்ந்தெடுக்கவும்</option>
+                                <option value="sbi">State Bank of India</option>
+                                <option value="canara">Canara Bank</option>
+                                <option value="iob">Indian Overseas Bank</option>
+                                <option value="tnsc">Tamil Nadu State Co-operative Bank</option>
+                                <option value="other">மற்றவை</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="accountNumber" class="custom-label" id="accountNumberLabel">
+                                <i class="fas fa-wallet mr-2 text-primary-600"></i> வங்கி கணக்கு எண்
+                            </label>
+                            <input type="text" id="accountNumber" class="custom-input w-full" placeholder="உங்கள் வங்கி கணக்கு எண்ணை உள்ளிடவும்">
+                        </div>
+                        
+                        <div>
+                            <label for="ifscCode" class="custom-label" id="ifscCodeLabel">
+                                <i class="fas fa-code mr-2 text-primary-600"></i> IFSC குறியீடு
+                            </label>
+                            <input type="text" id="ifscCode" class="custom-input w-full" placeholder="உங்கள் வங்கி IFSC குறியீட்டை உள்ளிடவும்">
+                        </div>
+                        
+                        <div>
+                            <label for="aadhaarNumber" class="custom-label" id="aadhaarNumberLabel">
+                                <i class="fas fa-id-card mr-2 text-primary-600"></i> ஆதார் எண்
+                            </label>
+                            <input type="text" id="aadhaarNumber" class="custom-input w-full" placeholder="உங்கள் ஆதார் எண்ணை உள்ளிடவும்">
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <label class="flex items-start">
+                            <input type="checkbox" id="termsCheckbox" class="mt-1 mr-2 rounded text-primary-600 focus:ring-primary-500">
+                            <span class="text-sm text-gray-600" id="termsText">நான் அனைத்து விதிமுறைகளையும் நிபந்தனைகளையும் படித்து ஏற்றுக்கொள்கிறேன்</span>
+                        </label>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row justify-between items-center mt-8">
+                        <button id="backToStep3" class="custom-button bg-gray-500 hover:bg-gray-600 mb-4 md:mb-0">
+                            <i class="fas fa-arrow-left mr-2"></i> <span>திரும்பிச் செல்க</span>
+                        </button>
+                        <button id="submitApplication" class="custom-button">
+                            <i class="fas fa-paper-plane mr-2"></i> <span id="submitText">விண்ணப்பத்தை சமர்ப்பிக்கவும்</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div id="resultSection" class="result-section">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                    <i class="fas fa-check-circle text-3xl text-green-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-green-700 mb-2" id="successTitle">வாழ்த்துக்கள்! உங்கள் விண்ணப்பம் வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது</h3>
+                <p class="text-gray-600" id="successSubtitle">உங்கள் விண்ணப்ப எண்: <span class="font-bold">NAB2023TN789456</span></p>
+            </div>
+            
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-r-lg">
+                <div class="flex">
+                    <div class="flex-shrink-0 text-blue-500">
+                        <i class="fas fa-info-circle mt-1"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-800" id="nextStepsText">
+                            உங்கள் விண்ணப்பம் செயலாக்கத்தில் உள்ளது. உங்கள் வங்கி 3 வேலை நாட்களுக்குள் உங்களைத் தொடர்பு கொள்ளும். 
+                            நீங்கள் உங்கள் விண்ணப்ப நிலையை உங்கள் விவசாயி அட்டை எண் மூலம் கண்காணிக்கலாம்.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-center">
+                <button id="newApplication" class="custom-button">
+                    <i class="fas fa-plus mr-2"></i> <span id="newAppText">புதிய விண்ணப்பம்</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget">
+        <div class="chatbot-panel" id="chatbotPanel">
+            <div class="chatbot-header">
+                <span id="chatbotTitle">நபார்டு உதவி மையம்</span>
+                <button id="closeChatbot" class="text-white opacity-70 hover:opacity-100">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        <p id="chatWelcomeText">வணக்கம்! நபார்டு உதவி மையத்திற்கு வரவேற்கிறோம். நான் உங்களுக்கு எவ்வாறு உதவலாம்?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="userMessageInput" class="w-full rounded-l-lg px-3 py-2 border-none focus:outline-none" placeholder="உங்கள் கேள்வியை இங்கு உள்ளிடவும்...">
+                <button id="sendMessage" class="bg-green-700 text-white rounded-r-lg px-4 py-2 hover:bg-green-800">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        <button class="chatbot-button" id="openChatbot">
+            <i class="fas fa-comments"></i>
+        </button>
+    </div>
+
+    <script>
+        // Language translation data
+        const translations = {
+            'ta': {
+                'mainTitle': 'நபார்டு கடன் & திட்ட தகுதி சேகரிப்பு',
+                'subTitle': 'உங்கள் விவசாய தேவைகளுக்கான நிதி உதவி தீர்வுகள்',
+                'step1Label': 'விவரங்கள்',
+                'step2Label': 'தகுதி',
+                'step3Label': 'திட்டங்கள்',
+                'step4Label': 'விண்ணப்பம்',
+                'farmerIdLabel': 'விவசாயி அட்டை எண்',
+                'farmerNameLabel': 'விவசாயி பெயர்',
+                'landSizeLabel': 'நிலத்தின் அளவு (ஏக்கர்)',
+                'cropTypeLabel': 'பயிர் வகை',
+                'districtLabel': 'மாவட்டம்',
+                'loanPurposeLabel': 'கடன் நோக்கம்',
+                'loanAmountLabel': 'தேவையான கடன் தொகை (₹)',
+                'mobileNumberLabel': 'தொடர்பு எண்',
+                'requiredFieldsText': 'அனைத்து விவரங்களும் தேவை',
+                'checkEligibilityText': 'தகுதியை சரிபார்க்க',
+                'eligibilityTitle': 'வாழ்த்துக்கள்! நீங்கள் தகுதி பெற்றுள்ளீர்கள்',
+                'eligibilitySubtitle': 'உங்கள் விவரங்களின் அடிப்படையில், பின்வரும் திட்டங்களுக்கு நீங்கள் தகுதி பெற்றுள்ளீர்கள்',
+                'loanEligibilityTitle': 'கடன் தகுதி',
+                'maxLoanText': 'அதிகபட்ச தகுதியான கடன்:',
+                'interestRateText': 'வட்டி விகிதம்: 4% - 7%',
+                'subsidyEligibilityTitle': 'மானியத் தகுதி',
+                'maxSubsidyText': 'அதிகபட்ச தகுதியான மானியம்:',
+                'subsidyConditionText': 'உபகரணங்கள் மற்றும் நீர்ப்பாசனத்திற்கு',
+                'backText': 'திரும்பிச் செல்க',
+                'viewSchemesText': 'திட்டங்களைக் காண',
+                'availableSchemesTitle': 'உங்களுக்கான திட்டங்கள்',
+                'applyNowText': 'இப்போது விண்ணப்பிக்கவும்',
+                'recommendationText': 'பரிந்துரை: உங்கள் தேவைக்கேற்ப, சூரிய சக்தி நீர்ப்பாசன திட்டம் சிறந்த தேர்வாக இருக்கும். இது குறைந்த செலவில் நீர்ப்பாசனத்திற்கு உதவும்.',
+                'backText2': 'திரும்பிச் செல்க',
+                'applyText': 'விண்ணப்பிக்க',
+                'applicationFormTitle': 'விண்ணப்ப படிவம்',
+                'selectedSchemeLabel': 'தேர்ந்தெடுக்கப்பட்ட திட்டம்:',
+                'bankNameLabel': 'வங்கி பெயர்',
+                'accountNumberLabel': 'வங்கி கணக்கு எண்',
+                'ifscCodeLabel': 'IFSC குறியீடு',
+                'aadhaarNumberLabel': 'ஆதார் எண்',
+                'termsText': 'நான் அனைத்து விதிமுறைகளையும் நிபந்தனைகளையும் படித்து ஏற்றுக்கொள்கிறேன்',
+                'submitText': 'விண்ணப்பத்தை சமர்ப்பிக்கவும்',
+                'successTitle': 'வாழ்த்துக்கள்! உங்கள் விண்ணப்பம் வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது',
+                'successSubtitle': 'உங்கள் விண்ணப்ப எண்:',
+                'nextStepsText': 'உங்கள் விண்ணப்பம் செயலாக்கத்தில் உள்ளது. உங்கள் வங்கி 3 வேலை நாட்களுக்குள் உங்களைத் தொடர்பு கொள்ளும். நீங்கள் உங்கள் விண்ணப்ப நிலையை உங்கள் விவசாயி அட்டை எண் மூலம் கண்காணிக்கலாம்.',
+                'newAppText': 'புதிய விண்ணப்பம்',
+                'chatbotTitle': 'நபார்டு உதவி மையம்',
+                'chatWelcomeText': 'வணக்கம்! நபார்டு உதவி மையத்திற்கு வரவேற்கிறோம். நான் உங்களுக்கு எவ்வாறு உதவலாம்?'
+            },
+            'en': {
+                'mainTitle': 'NABARD Loan & Scheme Eligibility Checker',
+                'subTitle': 'Financial assistance solutions for your agricultural needs',
+                'step1Label': 'Details',
+                'step2Label': 'Eligibility',
+                'step3Label': 'Schemes',
+                'step4Label': 'Application',
+                'farmerIdLabel': 'Farmer ID Number',
+                'farmerNameLabel': 'Farmer Name',
+                'landSizeLabel': 'Land Size (Acres)',
+                'cropTypeLabel': 'Crop Type',
+                'districtLabel': 'District',
+                'loanPurposeLabel': 'Loan Purpose',
+                'loanAmountLabel': 'Required Loan Amount (₹)',
+                'mobileNumberLabel': 'Contact Number',
+                'requiredFieldsText': 'All fields are required',
+                'checkEligibilityText': 'Check Eligibility',
+                'eligibilityTitle': 'Congratulations! You are eligible',
+                'eligibilitySubtitle': 'Based on your details, you are eligible for the following schemes',
+                'loanEligibilityTitle': 'Loan Eligibility',
+                'maxLoanText': 'Maximum eligible loan:',
+                'interestRateText': 'Interest Rate: 4% - 7%',
+                'subsidyEligibilityTitle': 'Subsidy Eligibility',
+                'maxSubsidyText': 'Maximum eligible subsidy:',
+                'subsidyConditionText': 'For equipment and irrigation',
+                'backText': 'Go Back',
+                'viewSchemesText': 'View Schemes',
+                'availableSchemesTitle': 'Available Schemes For You',
+                'applyNowText': 'Apply Now',
+                'recommendationText': 'Recommendation: Based on your needs, the Solar Power Irrigation Scheme would be the best option. It helps with low-cost irrigation.',
+                'backText2': 'Go Back',
+                'applyText': 'Apply',
+                'applicationFormTitle': 'Application Form',
+                'selectedSchemeLabel': 'Selected Scheme:',
+                'bankNameLabel': 'Bank Name',
+                'accountNumberLabel': 'Bank Account Number',
+                'ifscCodeLabel': 'IFSC Code',
+                'aadhaarNumberLabel': 'Aadhaar Number',
+                'termsText': 'I have read and agree to all terms and conditions',
+                'submitText': 'Submit Application',
+                'successTitle': 'Congratulations! Your application has been successfully submitted',
+                'successSubtitle': 'Your Application Number:',
+                'nextStepsText': 'Your application is being processed. Your bank will contact you within 3 working days. You can track your application status using your Farmer ID.',
+                'newAppText': 'New Application',
+                'chatbotTitle': 'NABARD Help Center',
+                'chatWelcomeText': 'Hello! Welcome to NABARD Help Center. How can I assist you today?'
+            },
+            'hi': {
+                'mainTitle': 'नाबार्ड ऋण और योजना पात्रता जांचकर्ता',
+                'subTitle': 'आपकी कृषि आवश्यकताओं के लिए वित्तीय सहायता समाधान',
+                'step1Label': 'विवरण',
+                'step2Label': 'पात्रता',
+                'step3Label': 'योजनाएँ',
+                'step4Label': 'आवेदन',
+                'farmerIdLabel': 'किसान आईडी नंबर',
+                'farmerNameLabel': 'किसान का नाम',
+                'landSizeLabel': 'भूमि का आकार (एकड़)',
+                'cropTypeLabel': 'फसल प्रकार',
+                'districtLabel': 'जिला',
+                'loanPurposeLabel': 'ऋण उद्देश्य',
+                'loanAmountLabel': 'आवश्यक ऋण राशि (₹)',
+                'mobileNumberLabel': 'संपर्क नंबर',
+                'requiredFieldsText': 'सभी फील्ड आवश्यक हैं',
+                'checkEligibilityText': 'पात्रता जांचें',
+                'eligibilityTitle': 'बधाई हो! आप पात्र हैं',
+                'eligibilitySubtitle': 'आपके विवरण के आधार पर, आप निम्नलिखित योजनाओं के लिए पात्र हैं',
+                'loanEligibilityTitle': 'ऋण पात्रता',
+                'maxLoanText': 'अधिकतम पात्र ऋण:',
+                'interestRateText': 'ब्याज दर: 4% - 7%',
+                'subsidyEligibilityTitle': 'सब्सिडी पात्रता',
+                'maxSubsidyText': 'अधिकतम पात्र सब्सिडी:',
+                'subsidyConditionText': 'उपकरण और सिंचाई के लिए',
+                'backText': 'वापस जाएं',
+                'viewSchemesText': 'योजनाएँ देखें',
+                'availableSchemesTitle': 'आपके लिए उपलब्ध योजनाएँ',
+                'applyNowText': 'अभी आवेदन करें',
+                'recommendationText': 'सिफारिश: आपकी आवश्यकताओं के आधार पर, सौर ऊर्जा सिंचाई योजना सबसे अच्छा विकल्प होगा। यह कम लागत वाली सिंचाई में मदद करता है।',
+                'backText2': 'वापस जाएं',
+                'applyText': 'आवेदन करें',
+                'applicationFormTitle': 'आवेदन पत्र',
+                'selectedSchemeLabel': 'चयनित योजना:',
+                'bankNameLabel': 'बैंक का नाम',
+                'accountNumberLabel': 'बैंक खाता संख्या',
+                'ifscCodeLabel': 'IFSC कोड',
+                'aadhaarNumberLabel': 'आधार नंबर',
+                'termsText': 'मैंने सभी नियम और शर्तें पढ़ी हैं और सहमत हूं',
+                'submitText': 'आवेदन जमा करें',
+                'successTitle': 'बधाई हो! आपका आवेदन सफलतापूर्वक जमा किया गया है',
+                'successSubtitle': 'आपका आवेदन संख्या:',
+                'nextStepsText': 'आपका आवेदन प्रक्रिया में है। आपका बैंक 3 कार्य दिवसों के भीतर आपसे संपर्क करेगा। आप अपने किसान आईडी का उपयोग करके अपने आवेदन की स्थिति को ट्रैक कर सकते हैं।',
+                'newAppText': 'नया आवेदन',
+                'chatbotTitle': 'नाबार्ड सहायता केंद्र',
+                'chatWelcomeText': 'नमस्ते! नाबार्ड सहायता केंद्र में आपका स्वागत है। मैं आपकी कैसे सहायता कर सकता हूं?'
+            }
+        };
+
+        // Initialize with Tamil as default language
+        let currentLanguage = 'ta';
+
+        // Function to update UI language
+        function updateLanguage(langCode) {
+            currentLanguage = langCode;
+            const translation = translations[langCode];
+            
+            // Update all text elements
+            for (const [key, value] of Object.entries(translation)) {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = value;
+                }
+            }
+            
+            // Update placeholders for input fields
+            if (langCode === 'ta') {
+                document.getElementById('farmerId').placeholder = 'உங்கள் Aadhaar/நபார்டு ID உள்ளிடவும்';
+                document.getElementById('farmerName').placeholder = 'உங்கள் முழு பெயரை உள்ளிடவும்';
+                document.getElementById('landSize').placeholder = 'உங்கள் நிலத்தின் அளவை உள்ளிடவும்';
+                document.getElementById('loanAmount').placeholder = 'தேவையான தொகையை உள்ளிடவும்';
+                document.getElementById('mobileNumber').placeholder = 'உங்கள் மொபைல் எண்ணை உள்ளிடவும்';
+                document.getElementById('accountNumber').placeholder = 'உங்கள் வங்கி கணக்கு எண்ணை உள்ளிடவும்';
+                document.getElementById('ifscCode').placeholder = 'உங்கள் வங்கி IFSC குறியீட்டை உள்ளிடவும்';
+                document.getElementById('aadhaarNumber').placeholder = 'உங்கள் ஆதார் எண்ணை உள்ளிடவும்';
+                document.getElementById('userMessageInput').placeholder = 'உங்கள் கேள்வியை இங்கு உள்ளிடவும்...';
+            } else if (langCode === 'en') {
+                document.getElementById('farmerId').placeholder = 'Enter your Aadhaar/NABARD ID';
+                document.getElementById('farmerName').placeholder = 'Enter your full name';
+                document.getElementById('landSize').placeholder = 'Enter your land size';
+                document.getElementById('loanAmount').placeholder = 'Enter required amount';
+                document.getElementById('mobileNumber').placeholder = 'Enter your mobile number';
+                document.getElementById('accountNumber').placeholder = 'Enter your bank account number';
+                document.getElementById('ifscCode').placeholder = 'Enter your bank IFSC code';
+                document.getElementById('aadhaarNumber').placeholder = 'Enter your Aadhaar number';
+                document.getElementById('userMessageInput').placeholder = 'Type your question here...';
+            } else if (langCode === 'hi') {
+                document.getElementById('farmerId').placeholder = 'अपना आधार/नाबार्ड आईडी दर्ज करें';
+                document.getElementById('farmerName').placeholder = 'अपना पूरा नाम दर्ज करें';
+                document.getElementById('landSize').placeholder = 'अपनी भूमि का आकार दर्ज करें';
+                document.getElementById('loanAmount').placeholder = 'आवश्यक राशि दर्ज करें';
+                document.getElementById('mobileNumber').placeholder = 'अपना मोबाइल नंबर दर्ज करें';
+                document.getElementById('accountNumber').placeholder = 'अपना बैंक खाता संख्या दर्ज करें';
+                document.getElementById('ifscCode').placeholder = 'अपना बैंक IFSC कोड दर्ज करें';
+                document.getElementById('aadhaarNumber').placeholder = 'अपना आधार नंबर दर्ज करें';
+                document.getElementById('userMessageInput').placeholder = 'अपना प्रश्न यहां टाइप करें...';
+            }
+        }
+
+        // Language selector functionality
+        document.getElementById('languageSelect').addEventListener('change', function() {
+            updateLanguage(this.value);
+        });
+
+        // Step Navigation
+        const steps = document.querySelectorAll('.step');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        function showStep(stepIndex) {
+            steps.forEach((step, index) => {
+                if (index <= stepIndex) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+            
+            tabContents.forEach((content, index) => {
+                if (index === stepIndex) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        // Button event listeners for navigation
+        document.getElementById('checkEligibility').addEventListener('click', function() {
+            showStep(1); // Show eligibility results
+        });
+        
+        document.getElementById('backToStep1').addEventListener('click', function() {
+            showStep(0); // Back to step 1
+        });
+        
+        document.getElementById('viewSchemes').addEventListener('click', function() {
+            showStep(2); // Show schemes
+        });
+        
+        document.getElementById('backToStep2').addEventListener('click', function() {
+            showStep(1); // Back to step 2
+        });
+        
+        document.getElementById('goToApply').addEventListener('click', function() {
+            showStep(3); // Show application form
+        });
+        
+        document.getElementById('backToStep3').addEventListener('click', function() {
+            showStep(2); // Back to step 3
+        });
+        
+        // Show result section on submit
+        document.getElementById('submitApplication').addEventListener('click', function() {
+            document.querySelector('.form-card').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+        });
+        
+        // New application button
+        document.getElementById('newApplication').addEventListener('click', function() {
+            // Reset form
+            document.getElementById('farmerId').value = '';
+            document.getElementById('farmerName').value = '';
+            document.getElementById('landSize').value = '';
+            document.getElementById('cropType').selectedIndex = 0;
+            document.getElementById('district').selectedIndex = 0;
+            document.getElementById('loanPurpose').selectedIndex = 0;
+            document.getElementById('loanAmount').value = '';
+            document.getElementById('mobileNumber').value = '';
+            document.getElementById('bankName').selectedIndex = 0;
+            document.getElementById('accountNumber').value = '';
+            document.getElementById('ifscCode').value = '';
+            document.getElementById('aadhaarNumber').value = '';
+            document.getElementById('termsCheckbox').checked = false;
+            
+            // Show form again
+            document.querySelector('.form-card').style.display = 'block';
+            document.getElementById('resultSection').style.display = 'none';
+            
+            // Go to step 1
+            showStep(0);
+        });
+        
+        // Chatbot functionality
+        document.getElementById('openChatbot').addEventListener('click', function() {
+            document.getElementById('chatbotPanel').classList.add('active');
+        });
+        
+        document.getElementById('closeChatbot').addEventListener('click', function() {
+            document.getElementById('chatbotPanel').classList.remove('active');
+        });
+        
+        document.getElementById('sendMessage').addEventListener('click', function() {
+            sendUserMessage();
+        });
+        
+        document.getElementById('userMessageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendUserMessage();
+            }
+        });
+        
+        function sendUserMessage() {
+            const userInput = document.getElementById('userMessageInput').value.trim();
+            if (userInput === '') return;
+            
+            // Add user message to chat
+            const chatMessages = document.getElementById('chatbotMessages');
+            chatMessages.innerHTML += `
+                <div class="message user-message">
+                    <div class="message-content">
+                        <p>${userInput}</p>
+                    </div>
+                </div>
+            `;
+            
+            // Clear input
+            document.getElementById('userMessageInput').value = '';
+            
+            // Simulate bot response (in a real app, this would call an API)
+            setTimeout(() => {
+                let botResponse = '';
+                
+                // Simple rule-based responses
+                const input = userInput.toLowerCase();
+                if (input.includes('loan') || input.includes('கடன்')) {
+                    botResponse = (currentLanguage === 'ta') ? 
+                        'நபார்டு பல்வேறு விவசாய கடன் திட்டங்களை வழங்குகிறது. நீங்கள் 4% முதல் 7% வரை வட்டி விகிதங்களில் கடன் பெறலாம். அதிக தகவலுக்கு, உங்கள் விவரங்களை பூர்த்தி செய்து தகுதியை சரிபார்க்கவும்.' :
+                        (currentLanguage === 'hi') ?
+                        'नाबार्ड विभिन्न कृषि ऋण योजनाएं प्रदान करता है। आप 4% से 7% तक ब्याज दरों पर ऋण प्राप्त कर सकते हैं। अधिक जानकारी के लिए, कृपया अपना विवरण भरें और पात्रता जांचें।' :
+                        'NABARD offers various agricultural loan schemes. You can get loans at interest rates ranging from 4% to 7%. For more information, please fill your details and check eligibility.';
+                } else if (input.includes('subsidy') || input.includes('மானியம்')) {
+                    botResponse = (currentLanguage === 'ta') ? 
+                        'நபார்டு விவசாய உபகரணங்கள், நீர்ப்பாசன அமைப்புகள் மற்றும் மதிப்பு கூட்டு செயலாக்கத்திற்கு 30% முதல் 40% வரை மானியங்களை வழங்குகிறது. தகுதிக்கான நிபந்தனைகள் திட்டத்தைப் பொறுத்து மாறுபடும்.' :
+                        (currentLanguage === 'hi') ?
+                        'नाबार्ड कृषि उपकरण, सिंचाई प्रणालियों और मूल्य वर्धित प्रसंस्करण के लिए 30% से 40% तक सब्सिडी प्रदान करता है। पात्रता की शर्तें योजना के अनुसार भिन्न होती हैं।' :
+                        'NABARD provides subsidies ranging from 30% to 40% for agricultural equipment, irrigation systems, and value-added processing. Eligibility conditions vary depending on the scheme.';
+                } else if (input.includes('solar') || input.includes('சூரிய')) {
+                    botResponse = (currentLanguage === 'ta') ? 
+                        'சூரிய சக்தி நீர்ப்பாசன திட்டம் சூரிய பம்புகளுக்கு 30% மானியம் வழங்குகிறது, அதிகபட்சம் ₹1,00,000 வரை. இது மின்சார செலவுகளைக் குறைக்க உதவும் மற்றும் நீடித்த நீர்ப்பாசனத்தை ஆதரிக்கும்.' :
+                        (currentLanguage === 'hi') ?
+                        'सौर ऊर्जा सिंचाई योजना सौर पंपों के लिए 30% सब्सिडी प्रदान करती है, अधिकतम ₹1,00,000 तक। यह बिजली लागत को कम करने में मदद करता है और स्थायी सिंचाई का समर्थन करता है।' :
+                        'The Solar Power Irrigation Scheme provides 30% subsidy for solar pumps, up to a maximum of ₹1,00,000. It helps reduce electricity costs and supports sustainable irrigation.';
+                } else {
+                    botResponse = (currentLanguage === 'ta') ? 
+                        'உங்கள் கேள்விக்கு நன்றி. கூடுதல் தகவலுக்கு, தயவுசெய்து படிவத்தை நிரப்பவும் அல்லது குறிப்பிட்ட திட்டம் பற்றி கேளுங்கள்.' :
+                        (currentLanguage === 'hi') ?
+                        'आपके प्रश्न के लिए धन्यवाद। अधिक जानकारी के लिए, कृपया फॉर्म भरें या किसी विशिष्ट योजना के बारे में पूछें।' :
+                        'Thank you for your question. For more information, please fill out the form or ask about a specific scheme.';
+                }
+                
+                // Add bot response to chat
+                chatMessages.innerHTML += `
+                    <div class="message bot-message">
+                        <div class="message-content">
+                            <p>${botResponse}</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 800);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Initialize
+        updateLanguage('ta');
+        document.getElementById('resultSection').style.display = 'none';
+    </script>
+
+    <style>
+        /* Custom CSS */
+        :root {
+            --primary-color: #166534;
+            --secondary-color: #15803d;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            margin: 0;
+            padding: 0;
+        }
+
+        .custom-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .app-header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+        }
+
+        .custom-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500
