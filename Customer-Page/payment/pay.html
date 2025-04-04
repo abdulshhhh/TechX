@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="payCss.css">
+</head>
+<body>
+    <div class="checkout-container">
+        <h2 class="checkout-title">Complete Your Purchase</h2>
+        
+        <div class="product-summary">
+            <img id="product-image" class="product-image" src="" alt="Product Image">
+            <div class="product-details">
+                <h3 id="product-name"></h3>
+                <p id="product-price"></p>
+            </div> 
+        </div>
+        
+        <div class="quantity-selector">
+            <label for="quantity">Quantity: </label>
+            <div class="quantity-input-container">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" id="quantity" value="1" min="1" class="quantity-input">
+                <button class="quantity-btn plus">+</button>
+            </div>
+            <span id="unit" class="unit-label">kg</span>
+        </div>
+        
+        <div class="total-amount">
+            <h3>Total: <span id="total">₹0</span></h3>
+        </div>
+        
+        
+        <button id="rzp-button1" class="payment-button">
+            <i class="fas fa-money-bill"></i> Proceed to Payment
+        </button>
+    </div>
+    
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="payScript.js"></script>
+</body>
+</html>

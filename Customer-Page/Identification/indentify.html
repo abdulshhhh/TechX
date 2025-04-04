@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ullavan Connect - Who Are You?</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="particles-container" id="particles-js"></div>
+    
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">Ulavan<span>Connect</span></h1>
+            <p class="tagline">Bridging Farms to Tables</p>
+        </header>
+        
+        <div class="selection-container">
+            <h2>Who are you?</h2>
+            <p class="subtitle">Select your role to continue</p>
+            
+            <div class="cards-wrapper">
+                <div class="card farmer-card" data-role="farmer">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-tractor"></i>
+                            <h3>Farmer</h3>
+                            <p>I grow fresh produce</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>Join as Farmer</h3>
+                            <p>Sell directly to customers and get fair prices</p>
+                            <button class="select-btn" onclick="window.location.href='/Farmer-Page/uzh login.html'">Select</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card customer-card" data-role="customer">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-shopping-basket"></i>
+                            <h3>Customer</h3>
+                            <p>I buy fresh produce</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>Join as Customer</h3>
+                            <p>Buy farm-fresh products directly from growers</p>
+                            <button class="select-btn" onclick="window.location.href='/Tamil.html'">Select</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card driver-card" data-role="driver">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-truck"></i>
+                            <h3>Driver</h3>
+                            <p>I deliver products</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>Join as Driver</h3>
+                            <p>Connect farmers with customers through delivery</p>
+                            <button class="select-btn">Select</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <p>© 2025 UlavanConnect. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <div class="floating-icons">
+        <i class="fas fa-leaf floating-icon"></i>
+        <i class="fas fa-apple-alt floating-icon"></i>
+        <i class="fas fa-carrot floating-icon"></i>
+        <i class="fas fa-seedling floating-icon"></i>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

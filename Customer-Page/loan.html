@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Loan Schemes | AgriConnect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-dark: #1b5e20;
+            --background: #1a1a1a;
+            --card-bg: #222222;
+            --text: #f5f5f5;
+            --text-secondary: #bdbdbd;
+            --accent: #ff6d00;
+            --success: #4caf50;
+            --warning: #ff9800;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text);
+            border: 1px solid var(--text);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--background);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-circle {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: none;
+            background-color: var(--card-bg);
+            color: var(--text);
+            padding-left: 40px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-icon i {
+            font-size: 1.2rem;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .translate {
+            background: linear-gradient(45deg, #ff9800, #ff5722);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 4px 10px rgba(255, 87, 34, 0.3);
+            position: relative;
+            top: -5px;
+        }
+
+        /* Hero Section - Farmer Loans */
+        .hero-loan {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            margin-bottom: 50px;
+            background: linear-gradient(135deg, rgba(46, 125, 50, 0.8), rgba(27, 94, 32, 0.9)), url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-loan-content {
+            max-width: 800px;
+            padding: 0 40px;
+            animation: fadeIn 1s ease;
+        }
+
+        .hero-loan-title {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            color: white;
+        }
+
+        .hero-loan-text {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Loan Schemes Section */
+        .loan-schemes {
+            padding: 60px 0;
+        }
+
+        .scheme-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .scheme-tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .scheme-tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .scheme-tab:hover:not(.active) {
+            color: var(--text);
+        }
+
+        .scheme-content {
+            display: none;
+        }
+
+        .scheme-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .scheme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .scheme-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .scheme-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .scheme-header {
+            padding: 20px;
+            background-color: rgba(46, 125, 50, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .scheme-name {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .scheme-org {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .scheme-body {
+            padding: 20px;
+        }
+
+        .scheme-detail {
+            margin-bottom: 15px;
+            display: flex;
+        }
+
+        .scheme-detail i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .scheme-benefit {
+            background-color: rgba(76, 175, 80, 0.1);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border-left: 3px solid var(--success);
+        }
+
+        .scheme-benefit-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--success);
+        }
+
+        .scheme-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .eligibility-check {
+            background-color: rgba(255, 109, 0, 0.1);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .eligibility-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--accent);
+        }
+
+        /* How to Apply Section */
+        .apply-section {
+            padding: 60px 0;
+            background-color: var(--card-bg);
+        }
+
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            flex: 0 0 calc(25% - 30px);
+            text-align: center;
+            position: relative;
+            padding: 0 15px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            width: calc(100% - 50px);
+            height: 2px;
+            background-color: var(--primary);
+            z-index: 1;
+        }
+
+        .step-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 60px 0;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-question {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background-color: rgba(46, 125, 50, 0.1);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active .faq-question {
+            background-color: rgba(46, 125, 50, 0.2);
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 20px 20px;
+            max-height: 500px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            padding: 60px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h4 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .footer-column h4::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 35px;
+            height: 35px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Chat Bubble */
+        .chat-bubble {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+        }
+
+        .chat-btn {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .chat-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-btn i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .steps-container {
+                flex-wrap: wrap;
+                gap: 30px;
+            }
+            
+            .step {
+                flex: 0 0 calc(50% - 30px);
+            }
+            
+            .step:not(:last-child)::after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .scheme-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-wrap: wrap;
+            }
+            
+            .search-bar {
+                order: 3;
+                margin: 15px 0 0;
+                max-width: 100%;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-icons {
+                display: none;
+            }
+            
+            .hero-loan-title {
+                font-size: 2.2rem;
+            }
+            
+            .step {
+                flex: 0 0 100%;
+                margin-bottom: 30px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-loan {
+                height: 350px;
+            }
+            
+            .hero-loan-content {
+                padding: 0 20px;
+            }
+            
+            .scheme-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .scheme-tab {
+                flex: 0 0 50%;
+                text-align: center;
+                padding: 10px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-circle">A</div>
+                <div class="logo-text">UzhavanConnect</div>
+            </div>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search for schemes, loans...">
+            </div>
+            
+            <div class="nav-icons">
+                <div class="nav-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="nav-icon">
+                    <i class="fas fa-bell"></i>
+                    <div class="cart-badge">3</div>
+                </div>
+                <div class="nav-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <button class="translate">தமிழ்</button>
+            </div>
+            
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-loan">
+        <div class="hero-loan-content">
+            <h1 class="hero-loan-title">Farmer Loan Schemes & Support</h1>
+            <p class="hero-loan-text">Discover government-backed financial assistance programs designed to empower farmers across India and Tamil Nadu. Get access to low-interest loans, subsidies, and welfare schemes.</p>
+            <div class="hero-buttons">
+                <a href="#central-schemes" class="btn btn-primary">Central Schemes</a>
+                <a href="#state-schemes" class="btn btn-secondary">TN State Schemes</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loan Schemes Section -->
+    <section class="loan-schemes container" id="central-schemes">
+        <h2 class="section-title">Government Loan Schemes</h2>
+        
+        <div class="scheme-tabs">
+            <div class="scheme-tab active" data-tab="central">Central Government</div>
+            <div class="scheme-tab" data-tab="state">Tamil Nadu State</div>
+        </div>
+        
+        <!-- Central Government Schemes -->
+        <div class="scheme-content active" id="central-schemes-content">
+            <div class="scheme-grid">
+                <!-- PM-KISAN -->
+                <div class="scheme-card">
+                    <div class="scheme-header">
+                        <h3 class="scheme-name">PM-KISAN</h3>
+                        <p class="scheme-org">Government of India</p>
+                    </div>
+                    <div class="scheme-body">
+                        <div class="scheme-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Direct income support to small and marginal farmers</p>
+                        </div>
+                        <div class="scheme-detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <p>₹6,000 annually in three equal installments</p>
+                        </div>
+                        <div class="scheme-benefit">
+                            <div class="scheme-benefit-title">Key Benefit</div>
+                            <p>Financial assistance for purchasing agricultural inputs</p>
+                        </div>
+                        <div class="eligibility-check">
+                            <div class="eligibility-title">Eligibility</div>
+                            <p>Small and marginal landholder farmer families</p>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="https://pmkisan.gov.in/" target="_blank" class="btn btn-primary">Apply Now</a>
+                            <a href="#" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PM-KMY -->
+                <div class="scheme-card">
+                    <div class="scheme-header">
+                        <h3 class="scheme-name">PM-KMY</h3>
+                        <p class="scheme-org">Ministry of Agriculture</p>
+                    </div>
+                    <div class="scheme-body">
+                        <div class="scheme-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Pension support to small and marginal farmers</p>
+                        </div>
+                        <div class="scheme-detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <p>₹3,000 monthly pension after 60 years</p>
+                        </div>
+                        <div class="scheme-benefit">
+                            <div class="scheme-benefit-title">Key Benefit</div>
+                            <p>Social security for farmers in old age</p>
+                        </div>
+                        <div class="eligibility-check">
+                            <div class="eligibility-title">Eligibility</div>
+                            <p>Small and marginal farmers aged 18-40 years</p>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="https://pmkmy.gov.in/" target="_blank" class="btn btn-primary">Apply Now</a>
+                            <a href="#" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PMFBY -->
+                <div class="scheme-card">
+                    <div class="scheme-header">
+                        <h3 class="scheme-name">PMFBY</h3>
+                        <p class="scheme-org">Ministry of Agriculture</p>
+                    </div>
+                    <div class="scheme-body">
+                        <div class="scheme-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Crop insurance against natural calamities</p>
+                        </div>
+                        <div class="scheme-detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <p>Premium as low as 1.5-5% of sum insured</p>
+                        </div>
+                        <div class="scheme-benefit">
+                            <div class="scheme-benefit-title">Key Benefit</div>
+                            <p>Financial protection against crop failure</p>
+                        </div>
+                        <div class="eligibility-check">
+                            <div class="eligibility-title">Eligibility</div>
+                            <p>All farmers including sharecroppers and tenant farmers</p>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="https://pmfby.gov.in/" target="_blank" class="btn btn-primary">Apply Now</a>
+                            <a href="#" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- KCC Scheme -->
+                <div class="scheme-card">
+                    <div class="scheme-header">
+                        <h3 class="scheme-name">Kisan Credit Card</h3>
+                        <p class="scheme-org">RBI & NABARD</p>
+                    </div>
+                    <div class="scheme-body">
+                        <div class="scheme-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Timely credit for agricultural needs</p>
+                        </div>
+                        <div class="scheme-detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <p>Interest subvention makes effective rate 4% p.a.</p>
+                        </div>
+                        <div class="scheme-benefit">
+                            <div class="scheme-benefit-title">Key Benefit</div>
+                            <p>Flexible credit for crops, inputs, and post-harvest expenses</p>
+                        </div>
+                        <div class="eligibility-check">
+                            <div class="eligibility-title">Eligibility</div>
+                            <p>All farmers including individual/joint cultivators</p>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="https://www.nabard.org/content.aspx?id=512" target="_blank" class="btn btn-primary">Apply Now</a>
+                            <a href="#" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PMKSY -->
+                <div class="scheme-card">
+                    <div class="scheme-header">
+                        <h3 class="scheme-name">PMKSY</h3>
+                        <p class="scheme-org">Ministry of Water Resources</p>
+                    </div>
+                    <div class="scheme-body">
+                        <div class="scheme-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Enhance irrigation coverage and water efficiency</p>
+                        </div>
+                        <div class="scheme-detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <p>Subsidies for micro-irrigation systems</p>
+                        </div>
+                        <div class="scheme-benefit">
+                            <div class="scheme-benefit-title">Key Benefit</div>
+                            <p>More crop per drop with efficient water use</p>
+                        </div>
+                        <div class="eligibility-check">
+                            <div class="eligibility-title">Eligibility</div>
+                            <p>Farmers with cultivable land</p>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="https://pmksy.gov.in/" target="_blank" class="btn btn-primary">Apply Now</a>
+                            <a href="#" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Soil Health Card -->
+                <div class="scheme-card">
+                    <div class="scheme-header">
+                        <h3 class="scheme-name">Soil Health Card</h3>
+                        <p class="scheme-org">Ministry of Agriculture</p>
+                    </div>
+                    <div class="scheme-body">
+                        <div class="scheme-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Information on soil nutrient status</p>
+                        </div>
+                        <div class="scheme-detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <p>Free soil testing every 2 years</p>
+                        </div>
+                        <div class="scheme-benefit">
+                            <div class="scheme-benefit-title">Key Benefit</div>
+                            <p>Optimized fertilizer use and improved productivity</p>
+                        </div>
+                        <div class="eligibility-check">
+                            <div class="eligibility-title">Eligibility</div>
+                            <p>All farmers across India</p>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="https://soilhealth.dac.gov.in/" target="_blank" class="btn btn-primary">Apply Now</a>
+                            <a href="#" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tamil Nadu State Schemes -->
+        <div class="scheme-content" id="state-schemes-content">
+            <div class="scheme-grid">
+                <!-- Farm Pond Scheme -->
+                <div class="scheme-card">
+                    <div class="scheme-header">
+                        <h3 class="scheme-name">Farm Pond Scheme</h3>
+                        <p class="scheme-org">TN Agriculture Department</p>
+                    </div>
+                    <div class="scheme-body">
+                        <div class="scheme-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Water conservation through farm ponds</p>
+                        </div>
+                        <div class="scheme-detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <p>₹75,000 subsidy (₹25,000 farmer contribution)</p>
+                        </div>
+                        <div class="scheme-benefit">
+                            <div class="scheme-benefit-title">Key Benefit</div>
+                            <p>Improved water availability for irrigation</p>
+                        </div>
+                        <div class="eligibility-check">
+                            <div class="eligibility-title">Eligibility</div>
+                            <p>Farmers with minimum 0.5 acre land</p>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="https://www.tn.gov.in/department/2" target="_blank" class="btn btn-primary">Apply Now</a>
+                            <a href="#" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Rainwater Harvesting -->
+                <div class="scheme-card">
+                    <div class="scheme-header">
+                        <h3 class="scheme-name">Rainwater Harvesting</h3>
+                        <p class="scheme-org">TN Agriculture Department</p>
+                    </div>
+                    <div class="scheme-body">
+                        <div class="scheme-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Groundwater recharge structures</p>
+                        </div>
+                        <div class="scheme-detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <p>100% subsidy for construction</p>
+                        </div>
+                        <div class="scheme-benefit">
+                            <div class="scheme-benefit-title">Key Benefit</div>
+                            <p>Improved groundwater levels and drought resilience</p>
+                        </div>
+                        <div class="eligibility-check">
+                            <div class="eligibility-title">Eligibility</div>
+                            <p>All farmers in water-scarce areas</p>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="https://www.tn.gov.in/department/2" target="_blank" class="btn btn-primary">Apply Now</a>
+                            <a href="#" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pumpset Subsidy -->
+                <div class="scheme-card">
+                    <div class="scheme-header">
+                        <h3 class="scheme-name">Pumpset Subsidy</h3>
+                        <p class="scheme-org">TN Agriculture Department</p>
+                    </div>
+                    <div class="scheme-body">
+                        <div class="scheme-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Assistance for irrigation pumpsets</p>
+                        </div>
+                        <div class="scheme-detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <p>₹10,000 or 50% subsidy</p>
+                        </div>
+                        <div class="scheme-benefit">
+                            <div class="scheme-benefit-title">Key Benefit</div>
+                            <p>Improved irrigation capabilities</p>
+                        </div>
+                        <div class="eligibility-check">
+                            <div class="eligibility-title">Eligibility</div>
+                            <p>Farmers with existing borewells</p>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="https://www.tn.gov.in/department/2" target="_blank" class="btn btn-primary">Apply Now</a>
+                            <a href="#" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Agri Machinery Subsidy -->
+                <div class="scheme-card">
+                    <div class="scheme-header">
+                        <h3 class="scheme-name">Machinery Subsidy</h3>
+                        <p class="scheme-org">TN Agriculture Department</p>
+                    </div>
+                    <div class="scheme-body">
+                        <div class="scheme-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Farm mechanization support</p>
+                        </div>
+                        <div class="scheme-detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <p>50% subsidy (higher for SC/ST & women farmers)</p>
+                        </div>
+                        <div class="scheme-benefit">
+                            <div class="scheme-benefit-title">Key Benefit</div>
+                            <p>Reduced labor costs and improved efficiency</p>
+                        </div>
+                        <div class="eligibility-check">
+                            <div class="eligibility-title">Eligibility</div>
+                            <p>All farmers, cooperatives, and FPOs</p>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="https://www.tn.gov.in/department/2" target="_blank" class="btn btn-primary">Apply Now</a>
+                            <a href="#" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Horticulture Scheme -->
+                <div class="scheme-card">
+                    <div class="scheme-header">
+                        <h3 class="scheme-name">Horticulture Development</h3>
+                        <p class="scheme-org">TN Horticulture Dept.</p>
+                    </div>
+                    <div class="scheme-body">
+                        <div class="scheme-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Promotion of minor fruit crops</p>
+                        </div>
+                        <div class="scheme-detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <p>₹15,000-30,000 per hectare subsidy</p>
+                        </div>
+                        <div class="scheme-benefit">
+                            <div class="scheme-benefit-title">Key Benefit</div>
+                            <p>Diversification and higher income crops</p>
+                        </div>
+                        <div class="eligibility-check">
+                            <div class="eligibility-title">Eligibility</div>
+                            <p>Farmers growing specified fruit crops</p>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="https://tnhorticulture.tn.gov.in/" target="_blank" class="btn btn-primary">Apply Now</a>
+                            <a href="#" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Free Electricity -->
+                <div class="scheme-card">
+                    <div class="scheme-header">
+                        <h3 class="scheme-name">Free Electricity</h3>
+                        <p class="scheme-org">TNEB & Agriculture Dept.</p>
+                    </div>
+                    <div class="scheme-body">
+                        <div class="scheme-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Free agricultural electricity connections</p>
+                        </div>
+                        <div class="scheme-detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <p>Free connection and subsidized power</p>
+                        </div>
+                        <div class="scheme-benefit">
+                            <div class="scheme-benefit-title">Key Benefit</div>
+                            <p>Reduced irrigation costs</p>
+                        </div>
+                        <div class="eligibility-check">
+                            <div class="eligibility-title">Eligibility</div>
+                            <p>Farmers with agricultural land</p>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="https://www.tnebnet.org/agriculture/" target="_blank" class="btn btn-primary">Apply Now</a>
+                            <a href="#" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Apply Section -->
+    <section class="apply-section">
+        <div class="container">
+            <h2 class="section-title">How to Apply for Schemes</h2>
+            <p>Follow these simple steps to apply for farmer loan schemes and subsidies</p>
+            
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Check Eligibility</h3>
+                    <p>Review scheme criteria to ensure you qualify</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Gather Documents</h3>
+                    <p>Land records, ID proof, bank details, etc.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Apply Online/Offline</h3>
+                    <p>Use the portal or visit nearest agriculture office</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Track Application</h3>
+                    <p>Monitor status through portal or helpline</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section container">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What documents are needed to apply for PM-KISAN?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>You'll need Aadhaar card, land ownership documents, bank account details, and a self-declaration form. For joint holdings, all owners need to submit documents.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How long does it take to get Kisan Credit Card approval?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Typically 15-30 days after submitting a complete application at your nearest bank branch. The timeline may vary based on document verification.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can tenant farmers apply for these schemes?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, many schemes like PMFBY and KCC are available to tenant farmers. You'll need to provide tenant farming agreement documents.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is there any helpline for scheme-related queries?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, you can call the Kisan Call Center at 1800-180-1551 or contact your district agriculture officer for assistance.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How can I check my PM-KISAN payment status?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Visit the PM-KISAN portal (pmkisan.gov.in) and use your Aadhaar number, mobile number, or bank account number to check status.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>AgriConnect</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Our Services</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Farmer Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">All Schemes</a></li>
+                        <li><a href="#">Agriculture Tips</a></li>
+                        <li><a href="#">Market Prices</a></li>
+                        <li><a href="#">Weather Forecast</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://agricoop.nic.in/" target="_blank">Ministry of Agriculture</a></li>
+                        <li><a href="https://www.tn.gov.in/department/2" target="_blank">TN Agriculture Dept</a></li>
+                        <li><a href="https://pmkisan.gov.in/" target="_blank">PM-KISAN Portal</a></li>
+                        <li><a href="https://www.nabard.org/" target="_blank">NABARD</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone"></i> +91 9876543210</li>
+                        <li><i class="fas fa-envelope"></i> help@agriconnect.in</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Chennai, Tamil Nadu</li>
+                    </ul>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 AgriConnect. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chat Bubble -->
+    <div class="chat-bubble">
+        <div class="chat-btn">
+            <i class="fas fa-comment-dots"></i>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        const tabs = document.querySelectorAll('.scheme-tab');
+        const contents = document.querySelectorAll('.scheme-content');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-schemes-content`).classList.add('active');
+            });
+        });
+        
+        // FAQ toggle functionality
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            
+            question.addEventListener('click', () => {
+                // Close all other items
+                faqItems.forEach(i => {
+                    if (i !== item) {
+                        i.classList.remove('active');
+                    }
+                });
+                
+                // Toggle current item
+                item.classList.toggle('active');
+            });
+        });
+        
+        // Chat bubble toggle
+        const chatBtn = document.querySelector('.chat-btn');
+        
+        chatBtn.addEventListener('click', () => {
+            alert('Chat service will be available soon!');
+        });
+        
+        // Translate button
+        const translateBtn = document.querySelector('.translate');
+        translateBtn.addEventListener('click', () => {
+            alert('Tamil version will be available soon!');
+        });
+    </script>
+</body>
+</html>

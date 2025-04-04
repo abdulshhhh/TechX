@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>விவசாயி குரல் கட்டுப்பாட்டு செயலி</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f8e6;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #2e7d32;
+            text-align: center;
+        }
+        .status-container {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #e8f5e9;
+        }
+        #status {
+            margin: 10px 0;
+            min-height: 100px;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #388e3c;
+        }
+        button:disabled {
+            background-color: #a5d6a7;
+            cursor: not-allowed;
+        }
+        .product-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .image-preview {
+            margin-top: 15px;
+            text-align: center;
+        }
+        #preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            display: none;
+        }
+        .success-message {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #c8e6c9;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            button {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button id="toggle-lang" onclick="toggleLanguage()">English</button>
+        </div>
+        <h1 id="main-title">விவசாயி குரல் கட்டுப்பாட்டு செயலி</h1>
+        <p id="intro-text">குரல் கட்டளைகளைப் பயன்படுத்தி உங்கள் விவசாய பொருட்களை பதிவிடுங்கள்.</p>
+        
+        <div class="controls">
+            <button id="start-btn" onclick="startListening()">குரல் பதிவை தொடங்கவும்</button>
+            <button id="stop-btn" onclick="stopListening()" disabled>குரல் பதிவை நிறுத்தவும்</button>
+        </div>
+        
+        <div class="status-container">
+            <h2 id="status-title">நிலை</h2>
+            <p id="status">குரல் பதிவை தொடங்க மேலே உள்ள பொத்தானை அழுத்தவும்.</p>
+        </div>
+        
+        <div class="product-form" id="product-form">
+            <h2 id="form-title">பொருள் விவரங்கள்</h2>
+            
+            <div class="form-group">
+                <label for="product-name" id="name-label">பொருளின் பெயர்:</label>
+                <input type="text" id="product-name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-quantity" id="quantity-label">அளவு:</label>
+                <input type="text" id="product-quantity" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-price" id="price-label">விலை (₹):</label>
+                <input type="number" id="product-price" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="delivery-option" id="delivery-label">விநியோக விருப்பம்:</label>
+                <select id="delivery-option" required>
+                    <option value="yes" id="delivery-yes">ஆம்</option>
+                    <option value="no" id="delivery-no">இல்லை</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-location" id="location-label">இருப்பிட விவரம்:</label>
+                <input type="text" id="product-location" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-image" id="image-label">பொருளின் படம்:</label>
+                <input type="file" id="product-image" accept="image/*" onchange="previewImage(event)">
+                <div class="image-preview">
+                    <img id="preview-image" src="#" alt="Product Preview">
+                </div>
+            </div>
+            
+            <button id="submit-btn" onclick="submitProduct()">பொருளை பதிவு செய்</button>
+        </div>
+        
+        <div class="success-message" id="success-message">
+            <h2 id="success-title">வெற்றி!</h2>
+            <p id="success-text">உங்கள் பொருள் வெற்றிகரமாக பதிவேற்றப்பட்டது.</p>
+        </div>
+    </div>
+
+    <script>
+        // Language toggle functionality
+        let currentLang = 'tamil';
+        const translations = {
+            'main-title': {
+                'tamil': 'விவசாயி குரல் கட்டுப்பாட்டு செயலி',
+                'english': 'Farmer Voice Control App'
+            },
+            'intro-text': {
+                'tamil': 'குரல் கட்டளைகளைப் பயன்படுத்தி உங்கள் விவசாய பொருட்களை பதிவிடுங்கள்.',
+                'english': 'Post your agricultural products using voice commands.'
+            },
+            'start-btn': {
+                'tamil': 'குரல் பதிவை தொடங்கவும்',
+                'english': 'Start Voice Recording'
+            },
+            'stop-btn': {
+                'tamil': 'குரல் பதிவை நிறுத்தவும்',
+                'english': 'Stop Voice Recording'
+            },
+            'status-title': {
+                'tamil': 'நிலை',
+                'english': 'Status'
+            },
+            'status': {
+                'tamil': 'குரல் பதிவை தொடங்க மேலே உள்ள பொத்தானை அழுத்தவும்.',
+                'english': 'Press the button above to start voice recording.'
+            },
+            'form-title': {
+                'tamil': 'பொருள் விவரங்கள்',
+                'english': 'Product Details'
+            },
+            'name-label': {
+                'tamil': 'பொருளின் பெயர்:',
+                'english': 'Product Name:'
+            },
+            'quantity-label': {
+                'tamil': 'அளவு:',
+                'english': 'Quantity:'
+            },
+            'price-label': {
+                'tamil': 'விலை (₹):',
+                'english': 'Price (₹):'
+            },
+            'delivery-label': {
+                'tamil': 'விநியோக விருப்பம்:',
+                'english': 'Delivery Option:'
+            },
+            'delivery-yes': {
+                'tamil': 'ஆம்',
+                'english': 'Yes'
+            },
+            'delivery-no': {
+                'tamil': 'இல்லை',
+                'english': 'No'
+            },
+            'location-label': {
+                'tamil': 'இருப்பிட விவரம்:',
+                'english': 'Location Details:'
+            },
+            'image-label': {
+                'tamil': 'பொருளின் படம்:',
+                'english': 'Product Image:'
+            },
+            'submit-btn': {
+                'tamil': 'பொருளை பதிவு செய்',
+                'english': 'Submit Product'
+            },
+            'success-title': {
+                'tamil': 'வெற்றி!',
+                'english': 'Success!'
+            },
+            'success-text': {
+                'tamil': 'உங்கள் பொருள் வெற்றிகரமாக பதிவேற்றப்பட்டது.',
+                'english': 'Your product has been successfully posted.'
+            },
+            'toggle-lang': {
+                'tamil': 'English',
+                'english': 'தமிழ்'
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'tamil' ? 'english' : 'tamil';
+            
+            // Update all translated elements
+            for (const [id, translations] of Object.entries(translations)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    if (element.tagName === 'BUTTON' || element.tagName === 'INPUT') {
+                        element.value = translations[currentLang];
+                    } else {
+                        element.textContent = translations[currentLang];
+                    }
+                }
+            }
+
+            // Update placeholder texts if needed
+            document.getElementById('toggle-lang').textContent = translations['toggle-lang'][currentLang];
+        }
+
+        // Speech recognition variables
+        let recognition;
+        let isListening = false;
+        const currentProductDetails = {
+            name: '',
+            quantity: '',
+            price: '',
+            delivery: '',
+            location: ''
+        };
+        let currentQuestion = '';
+        
+        // Initialize speech recognition
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'ta-IN'; // Tamil language
+                
+                recognition.onstart = function() {
+                    isListening = true;
+                    document.getElementById('start-btn').disabled = true;
+                    document.getElementById('stop-btn').disabled = false;
+                    updateStatus('கேட்கிறேன்... பொருள் விவரங்களை சொல்லுங்கள்');
+                };
+                
+                recognition.onend = function() {
+                    if (isListening) {
+                        recognition.start(); // Restart if we're still supposed to be listening
+                    } else {
+                        document.getElementById('start-btn').disabled = false;
+                        document.getElementById('stop-btn').disabled = true;
+                        updateStatus('குரல் பதிவு நிறுத்தப்பட்டது.');
+                    }
+                };
+                
+                recognition.onresult = function(event) {
+                    let finalTranscript = '';
+                    
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript;
+                        }
+                    }
+                    
+                    if (finalTranscript.trim() !== '') {
+                        processVoiceCommand(finalTranscript);
+                    }
+                };
+                
+                recognition.onerror = function(event) {
+                    updateStatus('பிழை: ' + event.error);
+                    isListening = false;
+                    document.getElementById('start-btn').disabled = false;
+                    document.getElementById('stop-btn').disabled = true;
+                };
+            } else {
+                updateStatus('உங்கள் உலாவி குரல் அங்கீகரிப்பை ஆதரிக்கவில்லை. Chrome உலாவியைப் பயன்படுத்துங்கள்.');
+            }
+        }
+        
+        // Start listening
+        function startListening() {
+            initSpeechRecognition();
+            isListening = true;
+            recognition.start();
+        }
+        
+        // Stop listening
+        function stopListening() {
+            isListening = false;
+            if (recognition) {
+                recognition.stop();
+            }
+        }
+        
+        // Update status message
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+        }
+        
+        // Process voice commands
+        function processVoiceCommand(transcript) {
+            updateStatus('கேட்டது: ' + transcript);
+            
+            // Use Gemini API to extract information from Tamil voice command
+            // For this demo, we'll use a simplified approach without Gemini API
+            extractProductDetails(transcript);
+        }
+        
+        // Extract product details from voice transcript (simplified without Gemini API)
+        function extractProductDetails(transcript) {
+            const lowerTranscript = transcript.toLowerCase();
+            
+            // Example logic to extract product details based on command patterns
+            // In a real implementation, you would use Gemini API here
+            
+            if (currentQuestion === '') {
+                // Initial command processing
+                if (lowerTranscript.includes('kitta') || lowerTranscript.includes('கிட்ட')) {
+                    // Command like "Yen kitta 100 kilo thakali irruku itha post podu"
+                    if (lowerTranscript.includes('தக்காளி') || lowerTranscript.includes('thakali')) {
+                        currentProductDetails.name = 'தக்காளி';
+                        
+                        // Extract quantity
+                        const quantityMatch = lowerTranscript.match(/(\d+)\s*(கிலோ|kilo)/i);
+                        if (quantityMatch) {
+                            currentProductDetails.quantity = quantityMatch[1] + ' கிலோ';
+                        }
+                        
+                        // Fill form fields with extracted data
+                        document.getElementById('product-name').value = currentProductDetails.name;
+                        document.getElementById('product-quantity').value = currentProductDetails.quantity;
+                        
+                        // Ask for price
+                        currentQuestion = 'price';
+                        askQuestion('தக்காளி விலை என்ன?');
+                    } else {
+                        // Other product
+                        // Try to extract product name
+                        askQuestion('எந்த பொருளை பற்றி பேசுகிறீர்கள்?');
+                        currentQuestion = 'product';
+                    }
+                } else {
+                    askQuestion('உங்களிடம் உள்ள பொருள் விவரங்களை சொல்லுங்கள் (உதாரணம்: "என் கிட்ட 100 கிலோ தக்காளி இருக்கு")');
+                }
+            } else {
+                // Process answers to specific questions
+                switch (currentQuestion) {
+                    case 'product':
+                        currentProductDetails.name = transcript;
+                        document.getElementById('product-name').value = currentProductDetails.name;
+                        
+                        // Ask for quantity
+                        currentQuestion = 'quantity';
+                        askQuestion('அளவு எவ்வளவு?');
+                        break;
+                        
+                    case 'quantity':
+                        currentProductDetails.quantity = transcript;
+                        document.getElementById('product-quantity').value = currentProductDetails.quantity;
+                        
+                        // Ask for price
+                        currentQuestion = 'price';
+                        askQuestion('விலை என்ன?');
+                        break;
+                        
+                    case 'price':
+                        // Try to extract the price value
+                        const priceMatch = transcript.match(/(\d+)/);
+                        if (priceMatch) {
+                            currentProductDetails.price = priceMatch[1];
+                        } else {
+                            currentProductDetails.price = transcript;
+                        }
+                        document.getElementById('product-price').value = currentProductDetails.price;
+                        
+                        // Ask about delivery
+                        currentQuestion = 'delivery';
+                        askQuestion('விநியோக விருப்பம் உள்ளதா?');
+                        break;
+                        
+                    case 'delivery':
+                        if (lowerTranscript.includes('ஆம்') || lowerTranscript.includes('yes') || 
+                            lowerTranscript.includes('உள்ளது') || lowerTranscript.includes('இருக்கு')) {
+                            currentProductDetails.delivery = 'yes';
+                            document.getElementById('delivery-option').value = 'yes';
+                        } else {
+                            currentProductDetails.delivery = 'no';
+                            document.getElementById('delivery-option').value = 'no';
+                        }
+                        
+                        // Ask for location
+                        currentQuestion = 'location';
+                        askQuestion('உங்கள் இருப்பிட விவரங்கள் என்ன?');
+                        break;
+                        
+                    case 'location':
+                        currentProductDetails.location = transcript;
+                        document.getElementById('product-location').value = currentProductDetails.location;
+                        
+                        // Ask for image
+                        currentQuestion = 'image';
+                        askQuestion('தயவுசெய்து பொருளின் படத்தை பதிவேற்றவும்.');
+                        
+                        // Stop listening as we need manual image upload
+                        stopListening();
+                        break;
+                }
+            }
+        }
+        
+        // Ask a question via speech and update the status
+        function askQuestion(question) {
+            updateStatus(question);
+            
+            // Text-to-speech for the question (if available)
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(question);
+                utterance.lang = 'ta-IN';
+                speechSynthesis.speak(utterance);
+            }
+        }
+        
+        // Image preview handling
+        function previewImage(event) {
+            const preview = document.getElementById('preview-image');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.style.display = 'block';
+        }
+        
+        // Submit product to MongoDB (simplified)
+        function submitProduct() {
+            // Get all form values
+            const productData = {
+                name: document.getElementById('product-name').value,
+                quantity: document.getElementById('product-quantity').value,
+                price: document.getElementById('product-price').value,
+                delivery: document.getElementById('delivery-option').value,
+                location: document.getElementById('product-location').value,
+                image: document.getElementById('product-image').files[0] ? 
+                       document.getElementById('product-image').files[0].name : 'no-image.jpg',
+                timestamp: new Date()
+            };
+            
+            // Validate form
+            if (!productData.name || !productData.quantity || !productData.price || !productData.location) {
+                updateStatus('அனைத்து விவரங்களையும் பூர்த்தி செய்யவும்!');
+                return;
+            }
+            
+            // In a real app, here you would:
+            // 1. Create FormData object to handle the file upload
+            // 2. Send data to your backend API to store in MongoDB
+            // 3. Handle the response
+            
+            console.log('Submitting product data:', productData);
+            
+            // Simulating a successful POST request
+            setTimeout(() => {
+                // Show success message
+                document.getElementById('success-message').style.display = 'block';
+                
+                // Reset form after success
+                setTimeout(() => {
+                    resetForm();
+                }, 3000);
+            }, 1500);
+        }
+        
+        // Reset form after submission
+        function resetForm() {
+            document.getElementById('product-form').reset();
+            document.getElementById('preview-image').style.display = 'none';
+            document.getElementById('success-message').style.display = 'none';
+            currentQuestion = '';
+            updateStatus('புதிய பொருளை பதிவிட குரல் பதிவை மீண்டும் தொடங்கவும்.');
+            
+            Object.keys(currentProductDetails).forEach(key => {
+                currentProductDetails[key] = '';
+            });
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for browser support
+            if (!('webkitSpeechRecognition' in window)) {
+                updateStatus('உங்கள் உலாவி குரல் அங்கீகரிப்பை ஆதரிக்கவில்லை. Chrome உலாவியைப் பயன்படுத்துங்கள்.');
+                document.getElementById('start-btn').disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>

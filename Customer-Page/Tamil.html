@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>உழவன் கனெக்ட் - தமிழ்நாடு விவசாயிகளிடமிருந்து புதிய உற்பத்திகள்</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-circle">UC</div>
+                <div class="logo-text">Ulavan Connect</div>
+            </div>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search for fresh produce...">
+            </div>
+            
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="nav-icons">
+                <div class="nav-icons">
+                    <!-- Your existing nav icons here -->
+                    
+                    <!-- New Profile Button -->
+                    <a href="/user/profile.html" class="nav-icon" style="text-decoration: none; color: inherit;">
+                        <div class="nav-icon" style="cursor: pointer;" title="User Profile">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </a>
+                </div>
+                <a href="available.html" class="nav-icon nearby-btn">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Nearby</span>
+                </a>
+                <div class="nav-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <div class="cart-badge">3</div>
+                </div>
+                <button class="translate" onclick="switchLanguage2()">English</button>
+            </div>
+        </div>
+    </header> 
+    
+    <!-- Category Navigation -->
+    <div class="category-nav">
+        <div class="container">
+            <div class="scroll-arrow left">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="categories">
+                <div class="category-item active">அனைத்து பொருட்கள்</div>
+                <div class="category-item">பருவ காய்கறிகள்</div>
+                <div class="category-item">புதிய பழங்கள்</div>
+                <div class="category-item">கரிம பொருட்கள்</div>
+                <div class="category-item">தானியங்கள் & பருப்பு வகைகள்</div>
+                <div class="category-item">பால் பொருட்கள்</div>
+                <div class="category-item">விவசாயியின் சிறப்பு</div>
+                <div class="category-item">மூலிகைகள் & மசாலாப் பொருட்கள்</div>
+                <div class="category-item">வீட்டில் தயாரிக்கப்பட்ட பொருட்கள்</div>
+            </div>
+            <div class="scroll-arrow right">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="தமிழ்நாடு விவசாயிகளிடமிருந்து புதிய உற்பத்திகள்" class="hero-image">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1 class="hero-title">தமிழ்நாடு விவசாயிகளிடமிருந்து புதிதாக</h1>
+                <p class="hero-text">உள்ளூர் விவசாயிகளுடன் நேரடியாக இணைக்கிறோம். மத்தியஸ்தர்கள் இல்லாமல், நிலத்திலிருந்து நேராக தரமான பொருட்களை உங்களுக்கு வழங்குகிறோம்.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">இன்றே வாங்கவும்</a>
+                    <a href="#" class="btn btn-secondary">எங்கள் விவசாயிகளை சந்திக்கவும்</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Today's Fresh Picks -->
+    <section class="product-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">இன்றைய புதிய தேர்வுகள்</h2>
+                <a href="#" class="see-all">அனைத்தையும் காட்டு</a>
+            </div>
+            
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <img src="/images/tomato.jpeg" alt="கரிம தக்காளி" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">கரிம தக்காளி</h3>
+                        <div class="product-farmer">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="விவசாயி" class="farmer-avatar">
+                            <span>விவசாயி ரமேஷ்</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">₹45/கிலோ</span>
+                            <span class="original-price">₹60/கிலோ</span>
+                            <span class="discount">25% தள்ளுபடி</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary buy-now-btn" 
+                            data-name="கரிம தக்காளி" 
+                            data-price="45" 
+                            data-unit="kg" 
+                            data-image="/images/tomato.jpeg">
+                            இப்போது வாங்க
+                            </button>
+                            <button class="btn btn-secondary">கார்ட்டில் சேர்</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <img src="/images/banana.jpg" alt="புதிய வாழைப்பழங்கள்" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">புதிய வாழைப்பழங்கள்</h3>
+                        <div class="product-farmer">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="விவசாயி" class="farmer-avatar">
+                            <span>விவசாயி லட்சுமி</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">₹30/டஜன்</span>
+                            <span class="original-price">₹40/டஜன்</span>
+                            <span class="discount">25% தள்ளுபடி</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary buy-now-btn" 
+                            data-name="புதிய வாழைப்பழங்கள்" 
+                            data-price="30" 
+                            data-unit="kg" 
+                            data-image="/images/banana.jpg">
+                            இப்போது வாங்க
+                            </button>
+                            <button class="btn btn-secondary">கார்ட்டில் சேர்</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <img src="/images/carrot.jpeg" alt="கேரட்" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">புதிய கேரட்</h3>
+                        <div class="product-farmer">
+                            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="விவசாயி" class="farmer-avatar">
+                            <span>விவசாயி முருகன்</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">₹55/கிலோ</span>
+                            <span class="original-price">₹70/கிலோ</span>
+                            <span class="discount">21% தள்ளுபடி</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary buy-now-btn" 
+                            data-name="புதிய கேரட்" 
+                            data-price="55" 
+                            data-unit="kg" 
+                            data-image="/images/carrot.jpeg">
+                            இப்போது வாங்க
+                            </button>
+                            <button class="btn btn-secondary">கார்ட்டில் சேர்</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <img src="/images/okra.jpeg" alt="வெண்டைக்காய்" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">புதிய வெண்டைக்காய்</h3>
+                        <div class="product-farmer">
+                            <img src="https://randomuser.me/api/portraits/women/63.jpg" alt="விவசாயி" class="farmer-avatar">
+                            <span>விவசாயி கீதா</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">₹65/கிலோ</span>
+                            <span class="original-price">₹80/கிலோ</span>
+                            <span class="discount">19% தள்ளுபடி</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary buy-now-btn" 
+                            data-name="புதிய வெண்டைக்காய்" 
+                            data-price="65" 
+                            data-unit="kg" 
+                            data-image="/images/okra.jpeg">
+                            இப்போது வாங்க
+                            </button>
+                            <button class="btn btn-secondary">கார்ட்டில் சேர்</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+   <!-- Seasonal Insights Scroll -->
+   <section class="seasonal-insights">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">தமிழ்நாடு பருவகால அறுவடை</h2>
+            <p class="section-subtitle">எங்கள் பண்ணைகளில் இருந்து நேரடியாக உங்கள் வீடு வரை</p>
+        </div>
+        
+        <div class="insights-scroll-container">
+            <div class="insights-track">
+                <!-- Insight Card 1 -->
+                <div class="insight-card">
+                    <div class="insight-image" style="background-image: url('/images/mango.jpeg');"></div>
+                    <div class="insight-content">
+                        <h3>மாம்பழ காலம்</h3>
+                        <div class="season-tag">ஏப்ரல் - ஜூன்</div>
+                        <p>மதுரை தோட்டங்களில் முதிர்ச்சியடைந்த அல்போன்சோ மற்றும் பங்கனப்பள்ளி வகைகள்.</p>
+                        <div class="insight-stats">
+                            <span><i class="fas fa-leaf"></i> பண்ணை புதிய</span>
+                            <span><i class="fas fa-truck"></i> நேரடி விநியோகம்</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Insight Card 2 -->
+                <div class="insight-card">
+                    <div class="insight-image" style="background-image: url('/images/Brinjal.jpeg');"></div>
+                    <div class="insight-content">
+                        <h3>கத்தரிக்காய் அறுவடை</h3>
+                        <div class="season-tag">ஜூன் - செப்டம்பர்</div>
+                        <p>கோயம்புத்தூரில் இரசாயனம் இல்லாமல் வளர்க்கப்படும் காட்டு கத்தரி வகை.</p>
+                        <div class="insight-stats">
+                            <span><i class="fas fa-leaf"></i> பண்ணை புதிய</span>
+                            <span><i class="fas fa-truck"></i> நேரடி விநியோகம்</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Insight Card 3 -->
+                <div class="insight-card">
+                    <div class="insight-image" style="background-image: url('/images/nendaraBanana.jpeg');"></div>
+                    <div class="insight-content">
+                        <h3>நெந்திரம் வாழை</h3>
+                        <div class="season-tag">ஆண்டு முழுவதும்</div>
+                        <p>திருச்சியில் வளர்க்கப்படும், சமையலுக்கும் சிற்றுண்டிகளுக்கும் சிறந்தது.</p>
+                        <div class="insight-stats">
+                            <span><i class="fas fa-leaf"></i> பண்ணை புதிய</span>
+                            <span><i class="fas fa-truck"></i> நேரடி விநியோகம்</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Insight Card 4 -->
+                <div class="insight-card">
+                    <div class="insight-image" style="background-image: url('/images/tomato.jpeg');"></div>
+                    <div class="insight-content">
+                        <h3>இட்லி தக்காளி</h3>
+                        <div class="season-tag">நவம்பர் - பிப்ரவரி</div>
+                        <p>கிருஷ்ணகிரியில் வளர்க்கப்படும், ரசம் செய்ய சிறந்த கூடுதல் சுவை.</p>
+                        <div class="insight-stats">
+                            <span><i class="fas fa-leaf"></i> பண்ணை புதிய</span>
+                            <span><i class="fas fa-truck"></i> நேரடி விநியோகம்</span>
+                        </div>
+                    </div>
+                </div>
+              
+                
+            </div>
+        </div>
+        
+        <div class="cta-buttons">
+            <a href="#" class="btn btn-primary">இன்றே புதிய பொருட்களை வாங்கவும்</a>
+            <a href="#" class="btn btn-secondary">எங்கள் விவசாயிகளை சந்திக்கவும்</a>
+        </div>
+    </div>
+</section>
+    <!-- Organic Selections -->
+    <section class="product-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">கரிம பொருட்கள்</h2>
+                <a href="#" class="see-all">அனைத்தையும் காட்டு</a>
+            </div>
+            
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <img src="/images/ponni.jpeg" alt="கரிம அரிசி" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">கரிம பொன்னி அரிசி</h3>
+                        <div class="product-farmer">
+                            <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="விவசாயி" class="farmer-avatar">
+                            <span>விவசாயி கார்த்திக்</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">₹95/கிலோ</span>
+                            <span class="original-price">₹120/கிலோ</span>
+                            <span class="discount">21% தள்ளுபடி</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary buy-now-btn" 
+                            data-name="கரிம பொன்னி அரிசி" 
+                            data-price="95" 
+                            data-unit="kg" 
+                            data-image="/images/ponni.jpeg">
+                            இப்போது வாங்க
+                            </button>
+                            <button class="btn btn-secondary">கார்ட்டில் சேர்</button>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <img src="/images/milk.jpeg" alt="கரிம பால்" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">கரிம மாட்டுப் பால்</h3>
+                        <div class="product-farmer">
+                            <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="விவசாயி" class="farmer-avatar">
+                            <span>விவசாயி செந்தில்</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">₹60/லிட்டர்</span>
+                            <span class="original-price">₹75/லிட்டர்</span>
+                            <span class="discount">20% தள்ளுபடி</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary buy-now-btn" 
+                            data-name="கரிம மாட்டுப் பால்" 
+                            data-price="60" 
+                            data-unit="L" 
+                            data-image="/images/milk.jpeg">
+                            இப்போது வாங்க
+                            </button>
+                            <button class="btn btn-secondary">கார்ட்டில் சேர்</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <img src="/images/honey.jpeg" alt="கரிம தேன்" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">கரிம காட்டுத் தேன்</h3>
+                        <div class="product-farmer">
+                            <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="விவசாயி" class="farmer-avatar">
+                            <span>விவசாயி மீனா</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">₹350/500g</span>
+                            <span class="original-price">₹450/500g</span>
+                            <span class="discount">22% தள்ளுபடி</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary buy-now-btn" 
+                            data-name="கரிம காட்டுத் தேன்" 
+                            data-price="350" 
+                            data-unit="500g" 
+                            data-image="/images/honey.jpeg">
+                            இப்போது வாங்க
+                            </button>
+                            <button class="btn btn-secondary">கார்ட்டில் சேர்</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <img src="/images/eggs.jpeg" alt="கரிம முட்டைகள்" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">கரிம கோழி முட்டைகள்</h3>
+                        <div class="product-farmer">
+                            <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="விவசாயி" class="farmer-avatar">
+                            <span>விவசாயி ராஜு</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">₹120/டஜன்</span>
+                            <span class="original-price">₹150/டஜன்</span>
+                            <span class="discount">20% தள்ளுபடி</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary buy-now-btn" 
+                            data-name="கரிம கோழி முட்டைகள்" 
+                            data-price="120" 
+                            data-unit="dozen" 
+                            data-image="/images/eggs.jpeg">
+                            இப்போது வாங்க
+                            </button>
+                            <button class="btn btn-secondary">கார்ட்டில் சேர்</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Farmer Spotlight -->
+    <div class="container">
+        <div class="farmer-spotlight">
+            <div class="farmer-header">
+                <img src="https://randomuser.me/api/portraits/men/60.jpg" alt="சிறப்பு விவசாயி" class="farmer-avatar-large">
+                <div class="farmer-info">
+                    <h3>விவசாயி பிரகாஷ்</h3>
+                    <p>கரிம காய்கறி விவசாயி, கோயம்புத்தூர்</p>
+                    <div class="farmer-stats">
+                        <span class="farmer-stat">15+ வருடங்கள் விவசாயம்</span>
+                        <span class="farmer-stat">4.8/5 மதிப்பீடு</span>
+                        <span class="farmer-stat">500+ மகிழ்ச்சியான வாடிக்கையாளர்கள்</span>
+                    </div>
+                </div>
+            </div>
+            
+            <blockquote class="farmer-quote">
+                "இயற்கையான முறையில் வேதிப்பொருட்கள் இல்லாமல் உணவை வளர்க்க நான் நம்புகிறேன். உழவன் கனெக்ட் மூலம், உண்மையான கரிம பொருட்களை பாராட்டும் குடும்பங்களுடன் எனது விளைச்சலை நேரடியாக பகிர்ந்து கொள்ள முடிகிறது."
+            </blockquote>
+            
+            <a href="#" class="btn btn-primary">விவசாயியின் சுயவிவரத்தைப் பார்க்கவும்</a>
+            
+            <h4 style="margin: 30px 0 20px;">பிரகாஷின் புதிய தேர்வுகள்</h4>
+            
+            <div class="farmer-products">
+                <!-- Mini Product 1 -->
+                <div class="mini-product">
+                    <img src="/images/Brinjal.jpeg" alt="கத்தரிக்காய்" class="mini-product-image">
+                    <div class="mini-product-info">
+                        <div class="mini-product-name">கரிம கத்தரிக்காய்</div>
+                        <div class="mini-product-price">₹40/கிலோ</div>
+                    </div>
+                </div>
+                
+                <!-- Mini Product 2 -->
+                <div class="mini-product">
+                    <img src="/images/cucumber.jpeg" alt="வெள்ளரிக்காய்" class="mini-product-image">
+                    <div class="mini-product-info">
+                        <div class="mini-product-name">கரிம வெள்ளரிக்காய்</div>
+                        <div class="mini-product-price">₹35/கிலோ</div>
+                    </div>
+                </div>
+                
+                <!-- Mini Product 3 -->
+                <div class="mini-product">
+                    <img src="/images/beans.jpeg" alt="பீன்ஸ்" class="mini-product-image">
+                    <div class="mini-product-info">
+                        <div class="mini-product-name">கரிம பச்சை பீன்ஸ்</div>
+                        <div class="mini-product-price">₹65/கிலோ</div>
+                    </div>
+                </div>
+                
+                <!-- Mini Product 4 -->
+                <div class="mini-product">
+                    <img src="images/pumpkin.jpeg" alt="பூசணிக்காய்" class="mini-product-image">
+                    <div class="mini-product-info">
+                        <div class="mini-product-name">கரிம பூசணிக்காய்</div>
+                        <div class="mini-product-price">₹30/கிலோ</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>எங்களைப் பற்றி</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">எங்கள் கதை</a></li>
+                        <li><a href="#">இலக்கு & மதிப்புகள்</a></li>
+                        <li><a href="#">விவசாயிகள் வலைப்பின்னல்</a></li>
+                        <li><a href="#">நிலைத்தன்மை</a></li>
+                        <li><a href="#">வேலைவாய்ப்புகள்</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>வாடிக்கையாளர் சேவை</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">எங்களைத் தொடர்பு கொள்ளவும்</a></li>
+                        <li><a href="#">அடிக்கடி கேட்கப்படும் கேள்விகள்</a></li>
+                        <li><a href="#">கப்பல் & விநியோகம்</a></li>
+                        <li><a href="#">திரும்பப்பெறுதல் & பணத்திரும்பம்</a></li>
+                        <li><a href="#">தனியுரிமைக் கொள்கை</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>விவசாயிகளுக்கு</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">எங்கள் வலைப்பின்னலில் சேரவும்</a></li>
+                        <li><a href="#">விவசாயி வளங்கள்</a></li>
+                        <li><a href="#">பயிற்சி திட்டங்கள்</a></li>
+                        <li><a href="#">வெற்றிக் கதைகள்</a></li>
+                        <li><a href="#">சந்தை நுண்ணறிவுகள்</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>எங்களுடன் இணைக்கவும்</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">வலைப்பதிவு</a></li>
+                        <li><a href="#">சமையல் முறைகள்</a></li>
+                        <li><a href="#">பருவ வழிகாட்டி</a></li>
+                        <li><a href="#">தோட்டம் பார்வையிடுதல்</a></li>
+                    </ul>
+                    
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 உழவன் கனெக்ட். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை. தமிழ்நாட்டு விவசாயிகளிடமிருந்து உங்கள் வீட்டிற்கு புதிய உற்பத்திகள்.
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Chat Bubble -->
+    <div class="chat-bubble">
+        <div class="chat-btn">
+            <i class="fas fa-comment"></i>
+        </div>
+        <div class="chat-window">
+            <div class="chat-header">
+                <h4>உதவி தேவையா?</h4>
+                <button class="close-chat">&times;</button>
+            </div>
+            <div class="chat-body">
+                <div class="chat-message">
+                    <div class="bot-message">வணக்கம்! இன்று எப்படி உதவ முடியும்?</div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="உங்கள் செய்தியை தட்டச்சு செய்க...">
+                <button><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

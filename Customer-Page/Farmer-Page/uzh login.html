@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>உழவன் Connect - Farmer Verification</title>
+    
+    <!-- Modern CSS Frameworks -->
+    <link href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.73/dist/shoelace/shoelace.css" rel="stylesheet">
+    <link href="https://unpkg.com/@material-tailwind/html@latest/styles/material-tailwind.css" rel="stylesheet" />
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-light: #4caf50;
+            --secondary: #ff9800;
+            --dark: #263238;
+            --light: #f5f5f5;
+            --accent: #e91e63;
+            --primary-color: #2e7d32;
+            --secondary-color: #ff9800;
+            --success-color: #4caf50;
+            --error-color: #f44336;
+        }
+        
+        body {
+            font-family: 'Noto Sans Tamil', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            color: var(--dark);
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 1rem;
+        }
+        
+        /* Farmer Verification Card */
+        .verification-card {
+            max-width: 500px;
+            margin: 3rem auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card-header {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        /* Form Elements with Tamil Labels */
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: none;
+        }
+        
+        .form-group.active {
+            display: block;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+            outline: none;
+        }
+        
+        /* Photo Upload with Preview */
+        .photo-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        
+        .photo-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            border: 3px solid var(--primary);
+        }
+        
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .upload-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-btn:hover {
+            background: #fb8c00;
+            transform: translateY(-2px);
+        }
+        
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .submit-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+        }
+        
+        /* Language Toggle */
+        .language-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+        
+        /* Farmer ID Scanning Option */
+        .scan-option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0;
+            gap: 0.5rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        /* Form Navigation */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #3d8b40;
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        button sl-icon {
+            margin: 0 5px;
+        }
+        
+        .back-btn {
+            background-color: #9E9E9E;
+        }
+        
+        .back-btn:hover {
+            background-color: #757575;
+        }
+        
+        /* Visual Guide */
+        .visual-guide {
+            margin-top: 10px;
+            color: #757575;
+            font-style: italic;
+        }
+        
+        .visual-guide sl-icon {
+            vertical-align: middle;
+        }
+        
+        /* Location Container */
+        .location-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .map-view {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            background-color: #f5f5f5;
+            overflow: hidden;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .location-info {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .verify-location-btn {
+            background-color: var(--secondary-color);
+            width: 100%;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+        
+        .verification-details {
+            text-align: left;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+        
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Step Indicators */
+        .step-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            position: relative;
+        }
+        
+        .step-indicator.active {
+            background: var(--primary);
+        }
+        
+        .step-indicator.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 0.7rem;
+        }
+        
+        /* Input validation indicators */
+        .input-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        .input-indicator.valid::after {
+            content: '✓';
+            color: var(--success-color);
+            font-weight: bold;
+        }
+        
+        .input-indicator.invalid::after {
+            content: '✗';
+            color: var(--error-color);
+            font-weight: bold;
+        }
+        
+        /* Input with voice button */
+        .input-with-voice {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .input-with-voice .form-control {
+            flex: 1;
+        }
+        
+        .field-voice-btn {
+            background: var(--secondary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .field-voice-btn:hover {
+            transform: scale(1.1);
+            background: #fb8c00;
+        }
+        
+        /* Help popup */
+        .field-help {
+            position: absolute;
+            right: -10px;
+            top: 0;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+        
+        .help-popup {
+            position: absolute;
+            background: white;
+            border-radius: 8px;
+            padding: 0.8rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+            width: 200px;
+            top: -5px;
+            right: 20px;
+            display: none;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .field-help:hover .help-popup {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Toggle -->
+    <div class="language-toggle">
+        <sl-button-group>
+            <sl-button size="small" class="tamil-btn active">தமிழ்</sl-button>
+            <sl-button size="small" class="english-btn">English</sl-button>
+        </sl-button-group>
+    </div>
+    
+    <div class="container">
+        <!-- Farmer Verification Form -->
+        <div class="verification-card">
+            <div class="card-header">
+                <h2>உழவர் சான்றிதழ் சரிபார்ப்பு</h2>
+                <p>(Farmer Verification)</p>
+            </div>
+            
+            <div class="card-body">
+                <!-- Step Indicators -->
+                <div class="step-indicators">
+                    <div class="step-indicator active" data-step="1" title="ID"></div>
+                    <div class="step-indicator" data-step="2" title="Photo"></div>
+                    <div class="step-indicator" data-step="3" title="Location"></div>
+                </div>
+                
+                <form id="farmerVerificationForm">
+                    <!-- Uzhavan ID Input -->
+                    <div class="form-group active">
+                        <label for="uzhavanId" class="form-label">
+                            <sl-icon name="person-badge"></sl-icon>
+                            உழவர் அடையாள எண் (Uzhavan ID)
+                        </label>
+                        <div class="input-with-voice">
+                            <input type="text" id="uzhavanId" class="form-control" placeholder="உங்கள் உழவர் அடையாள எண்ணை உள்ளிடவும்" required>
+                            <div class="field-voice-btn" id="uzhavanIdVoice" aria-label="Voice input for ID">
+                                <sl-icon name="mic"></sl-icon>
+                            </div>
+                        </div>
+                        <span class="input-indicator" id="uzhavanIdIndicator"></span>
+                        
+                        <div class="field-help">
+                            <sl-icon name="question-circle"></sl-icon>
+                            <div class="help-popup">உழவர் அடையாள அட்டையில் உள்ள எண்ணை உள்ளிடவும் அல்லது QR ஸ்கேன் செய்யவும்</div>
+                        </div>
+                        
+                        <div class="scan-option" id="scanIdBtn">
+                            <sl-icon name="qr-code"></sl-icon>
+                            <span>QR குறியீட்டை ஸ்கேன் செய்க</span>
+                        </div>
+                        
+                        <div class="visual-guide">
+                            <p><small><sl-icon name="info-circle"></sl-icon> மைக் பொத்தானை தட்டி "அடையாள எண்" சொல்லவும்</small></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Photo Upload -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <sl-icon name="camera"></sl-icon>
+                            உங்கள் புகைப்படம் (Your Photo)
+                        </label>
+                        <div class="photo-upload">
+                            <div class="photo-preview" id="photoPreview">
+                                <sl-icon name="person-circle" style="font-size: 5rem; color: #9e9e9e;"></sl-icon>
+                            </div>
+                            <button type="button" class="upload-btn" id="uploadPhotoBtn">
+                                <sl-icon name="camera"></sl-icon>
+                                புகைப்படம் பதிவேற்றம்
+                            </button>
+                            <input type="file" id="photoInput" accept="image/*" capture="user" style="display: none;">
+                        </div>
+                        
+                        <div class="visual-guide">
+                            <p><small><sl-icon name="info-circle"></sl-icon> மைக் பொத்தானை தட்டி "புகைப்படம் எடுக்க" சொல்லவும்</small></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Location Verification -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <sl-icon name="geo-alt"></sl-icon>
+                            இருப்பிட சரிபார்ப்பு (Location Verification)
+                        </label>
+                        <div class="location-container">
+                            <div class="map-view" id="map-container">
+                                <div id="map-placeholder">
+                                    <sl-icon name="map" style="font-size: 3rem; color: #9e9e9e;"></sl-icon>
+                                    <p>இருப்பிடத்தைப் பெறுகிறது...</p>
+                                </div>
+                            </div>
+                            <div class="location-info" id="locationInfo">
+                                <p><sl-icon name="geo"></sl-icon> <span id="addressText">இருப்பிடம் இன்னும் சரிபார்க்கப்படவில்லை</span></p>
+                            </div>
+                            <button type="button" class="verify-location-btn" id="verifyLocationBtn">
+                                <sl-icon name="geo-alt-fill"></sl-icon>
+                                என் இருப்பிடத்தை சரிபார்க்கவும்
+                            </button>
+                        </div>
+                        
+                        <div class="visual-guide">
+                            <p><small><sl-icon name="info-circle"></sl-icon> மைக் பொத்தானை தட்டி "இருப்பிடத்தை சரிபார்க்க" சொல்லவும்</small></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Buttons -->
+                    <div class="form-navigation">
+                        <button type="button" class="back-btn" id="backBtn" disabled>
+                            <sl-icon name="arrow-left"></sl-icon>
+                            முந்தைய
+                        </button>
+                        <button type="button" class="next-btn" id="nextBtn">
+                            அடுத்து
+                            <sl-icon name="arrow-right"></sl-icon>
+                        </button>
+                        <button type="submit" class="submit-btn" id="submitBtn" style="display: none;">
+                            சமர்ப்பிக்க
+                            <sl-icon name="check-circle"></sl-icon>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>சரிபார்ப்பு முடிந்தது!</h3>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="success-icon">
+                    <sl-icon name="check-circle-fill"></sl-icon>
+                </div>
+                <p>உங்கள் விவரங்கள் வெற்றிகரமாக சரிபார்க்கப்பட்டன.</p>
+                <div class="verification-details" id="verificationDetails">
+                    <p><strong>உழவர் அடையாள எண்:</strong> <span id="confirmId"></span></p>
+                    <p><strong>சரிபார்க்கப்பட்ட இருப்பிடம்:</strong> <span id="confirmLocation"></span></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="primary-btn" id="goToHomeBtn">
+                    முகப்பு பக்கத்திற்கு செல்லவும்
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p id="loadingText">சரிபார்க்கிறது...</p>
+    </div>
+    
+    <!-- Shoelace JS -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.73/dist/shoelace/shoelace.esm.js"></script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // DOM elements
+        const form = document.getElementById('farmerVerificationForm');
+        const uzhavanIdInput = document.getElementById('uzhavanId');
+        const uzhavanIdIndicator = document.getElementById('uzhavanIdIndicator');
+        const photoInput = document.getElementById('photoInput');
+        const photoPreview = document.getElementById('photoPreview');
+        const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
+        const scanIdBtn = document.getElementById('scanIdBtn');
+        const verifyLocationBtn = document.getElementById('verifyLocationBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const backBtn = document.getElementById('backBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const formGroups = document.querySelectorAll('.form-group');
+        const stepIndicators = document.querySelectorAll('.step-indicator');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const goToHomeBtn = document.getElementById('goToHomeBtn');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const addressText = document.getElementById('addressText');
+        const confirmId = document.getElementById('confirmId');
+        const confirmLocation = document.getElementById('confirmLocation');
+        const tamilBtn = document.querySelector('.tamil-btn');
+        const englishBtn = document.querySelector('.english-btn');
+        const uzhavanIdVoice = document.getElementById('uzhavanIdVoice');
+        
+        // Application state
+        let currentStep = 1;
+        let language = 'tamil'; // Default language
+        let formData = {
+            id: '',
+            photo: null,
+            location: null,
+            address: ''
+        };
+        
+        // Initialize the form
+        initializeForm();
+        
+        function initializeForm() {
+            // Show first step
+            showStep(currentStep);
+            
+            // Event listeners for form navigation
+            nextBtn.addEventListener('click', goToNextStep);
+            backBtn.addEventListener('click', goToPreviousStep);
+            
+            // Other form interactions
+            uzhavanIdInput.addEventListener('input', validateUzhavanId);
+            uploadPhotoBtn.addEventListener('click', triggerPhotoUpload);
+            photoInput.addEventListener('change', handlePhotoUpload);
+            scanIdBtn.addEventListener('click', scanQRCode);
+            verifyLocationBtn.addEventListener('click', verifyLocation);
+            
+            // Form submission
+            form.addEventListener('submit', handleFormSubmit);
+            
+            // Modal actions
+            closeModalBtn.addEventListener('click', closeModal);
+            goToHomeBtn.addEventListener('click', goToHomePage);
+            
+            // Language toggle
+            tamilBtn.addEventListener('click', () => changeLanguage('tamil'));
+            englishBtn.addEventListener('click', () => changeLanguage('english'));
+            
+            // Voice input
+            uzhavanIdVoice.addEventListener('click', () => startVoiceInput('uzhavanId'));
+        }
+        
+        function showStep(step) {
+            // Hide all form groups
+            formGroups.forEach(group => {
+                group.classList.remove('active');
+            });
+            
+            // Update step indicators
+            stepIndicators.forEach((indicator, index) => {
+                if (index + 1 < step) {
+                    indicator.classList.add('completed');
+                    indicator.classList.remove('active');
+                } else if (index + 1 === step) {
+                    indicator.classList.add('active');
+                    indicator.classList.remove('completed');
+                } else {
+                    indicator.classList.remove('active', 'completed');
+                }
+            });
+            
+            // Show current step
+            formGroups[step - 1].classList.add('active');
+            
+            // Update navigation buttons
+            backBtn.disabled = step === 1;
+            nextBtn.style.display = step < formGroups.length ? 'flex' : 'none';
+            submitBtn.style.display = step === formGroups.length ? 'flex' : 'none';
+        }
+        
+        function goToNextStep() {
+            // Validate current step
+            if (!validateStep(currentStep)) {
+                return;
+            }
+            
+            if (currentStep < formGroups.length) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        }
+        
+        function goToPreviousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+        
+        function validateStep(step) {
+            switch(step) {
+                case 1:
+                    return validateUzhavanId();
+                case 2:
+                    return validatePhoto();
+                default:
+                    return true;
+            }
+        }
+        
+        function validateUzhavanId() {
+            const value = uzhavanIdInput.value.trim();
+            const isValid = value.length >= 6; // Assuming ID is at least 6 characters
+            
+            if (isValid) {
+                uzhavanIdIndicator.classList.add('valid');
+                uzhavanIdIndicator.classList.remove('invalid');
+                formData.id = value;
+            } else {
+                uzhavanIdIndicator.classList.add('invalid');
+                uzhavanIdIndicator.classList.remove('valid');
+            }
+            
+            return isValid;
+        }
+        
+        function validatePhoto() {
+            return formData.photo !== null;
+        }
+        
+        function triggerPhotoUpload() {
+            photoInput.click();
+        }
+        
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check if the file is an image
+                if (!file.type.match('image.*')) {
+                    alert('தயவு செய்து ஒரு படத்தைத் தேர்ந்தெடுக்கவும்');
+                    return;
+                }
+                
+                // Check file size (max 2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('படம் 2MB ஐ விட பெரியதாக இருக்கக்கூடாது');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    photoPreview.innerHTML = '';
+                    photoPreview.appendChild(img);
+                    formData.photo = file;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function scanQRCode() {
+            // In a real app, this would use the device camera to scan a QR code
+            showLoading('QR குறியீட்டை ஸ்கேன் செய்கிறது...');
+            
+            // Simulate a QR scan
+            setTimeout(() => {
+                uzhavanIdInput.value = 'UZ' + Math.floor(Math.random() * 900000 + 100000);
+                validateUzhavanId();
+                hideLoading();
+            }, 2000);
+        }
+        
+        function verifyLocation() {
+            showLoading('இருப்பிடத்தை சரிபார்க்கிறது...');
+            
+            // Check if geolocation is supported
+            if (!navigator.geolocation) {
+                hideLoading();
+                alert('உங்கள் உலாவி இருப்பிட சேவைகளை ஆதரிக்கவில்லை');
+                return;
+            }
+            
+            // Get current position
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    formData.location = { latitude, longitude };
+                    
+                    // Simulate reverse geocoding to get address
+                    setTimeout(() => {
+                        const address = simulateReverseGeocoding(latitude, longitude);
+                        addressText.textContent = address;
+                        formData.address = address;
+                        confirmLocation.textContent = address;
+                        
+                        // Update map placeholder with coordinates
+                        const mapPlaceholder = document.getElementById('map-placeholder');
+                        mapPlaceholder.innerHTML = `
+                            <div style="background-color: #e5efdc; height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px;">
+                                <sl-icon name="geo-alt-fill" style="font-size: 3rem; color: var(--primary-color);"></sl-icon>
+                                <p style="margin-top: 10px; font-size: 0.9rem;">இருப்பிடம்: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}</p>
+                                <p style="font-size: 0.8rem; color: #666;">${address}</p>
+                            </div>
+                        `;
+                        
+                        hideLoading();
+                    }, 2000);
+                },
+                (error) => {
+                    hideLoading();
+                    let errorMessage = 'இருப்பிடத்தைப் பெற முடியவில்லை: ';
+                    
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage += 'இருப்பிட அனுமதி மறுக்கப்பட்டது';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage += 'இருப்பிட தகவல் கிடைக்கவில்லை';
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage += 'இருப்பிட கோரிக்கை நேரம் முடிந்துவிட்டது';
+                            break;
+                        default:
+                            errorMessage += 'அறியப்படாத பிழை';
+                    }
+                    
+                    addressText.textContent = errorMessage;
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        }
+        
+        function simulateReverseGeocoding(lat, lng) {
+            // This is a simulation - in a real app you would use a geocoding service
+            const districts = ['தஞ்சாவூர்', 'மதுரை', 'சேலம்', 'கோயம்புத்தூர்', 'திருச்சி'];
+            const taluks = ['திருவாரூர்', 'கும்பகோணம்', 'பட்டுக்கோட்டை', 'நன்னிலம்', 'ஆவுடையார்கோயில்'];
+            const villages = ['குத்தாலம்', 'மணிகண்டம்', 'தென்னாலை', 'வெள்ளலூர்', 'கீழவீராணம்'];
+            
+            const district = districts[Math.floor(Math.random() * districts.length)];
+            const taluk = taluks[Math.floor(Math.random() * taluks.length)];
+            const village = villages[Math.floor(Math.random() * villages.length)];
+            
+            return `${district} மாவட்டம், ${taluk} தாலுகா, ${village} கிராமம்`;
+        }
+        
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            if (!validateStep(currentStep)) {
+                return;
+            }
+            
+            showLoading('உங்கள் விவரங்களை சரிபார்க்கிறது...');
+            
+            // Simulate form submission
+            setTimeout(() => {
+                hideLoading();
+                confirmId.textContent = formData.id;
+                openModal();
+            }, 2000);
+        }
+        
+        function openModal() {
+            confirmationModal.classList.add('active');
+        }
+        
+        function closeModal() {
+            confirmationModal.classList.remove('active');
+        }
+        
+        function goToHomePage() {
+    closeModal();
+    // Redirect to home page
+    alert('முகப்பு பக்கத்திற்கு திரும்புகிறது...');
+    window.location.href = "index.html";
+}
+        
+        function showLoading(message) {
+            document.getElementById('loadingText').textContent = message;
+            loadingOverlay.classList.add('active');
+        }
+        
+        function hideLoading() {
+            loadingOverlay.classList.remove('active');
+        }
+        
+        function changeLanguage(lang) {
+            language = lang;
+            
+            if (lang === 'tamil') {
+                tamilBtn.classList.add('active');
+                englishBtn.classList.remove('active');
+                // Set Tamil UI text (in a real app you would update all text elements)
+            } else {
+                englishBtn.classList.add('active'); 
+                tamilBtn.classList.remove('active');
+                // Set English UI text (in a real app you would update all text elements)
+            }
+        }
+        
+        function startVoiceInput(inputId) {
+            // Check if browser supports speech recognition
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+                
+                recognition.lang = language === 'tamil' ? 'ta-IN' : 'en-US';
+                recognition.interimResults = false;
+                
+                showLoading('பேச்சைக் கேட்கிறது...');
+                
+                recognition.start();
+                
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById(inputId).value = transcript;
+                    validateUzhavanId();
+                    hideLoading();
+                };
+                
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error', event.error);
+                    hideLoading();
+                };
+                
+                recognition.onend = function() {
+                    hideLoading();
+                };
+            } else {
+                alert('உங்கள் உலாவி குரல் உள்ளீட்டை ஆதரிக்கவில்லை');
+            }
+        }
+    });
+    </script>
+</body>
+</html>

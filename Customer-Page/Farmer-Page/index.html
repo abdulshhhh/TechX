@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Uzhavan Connect - Farmer Direct Market">
+  <title>Uzhavan Connect - Farmer Dashboard</title>
+  
+  <!-- Preload critical assets -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" as="style">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" as="style">
+  
+  <!-- Stylesheets -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js" defer></script>
+  
+  <style>
+    :root {
+      --primary-color: #10B981;
+      --primary-dark: #059669;
+      --secondary-color: #F59E0B;
+      --secondary-dark: #D97706;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f3f4f6;
+    }
+
+    .giant-button {
+      padding: 1.5rem;
+      font-size: 1.25rem;
+      border-radius: 1rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .giant-button:hover {
+      transform: translateY(-5px);
+    }
+
+    .voice-button {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 50%;
+      background: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .voice-button:hover {
+      transform: scale(1.1);
+    }
+
+    .voice-button.recording {
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .price-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+    }
+
+    .price-up {
+      background-color: #dcfce7;
+      color: #059669;
+    }
+
+    .price-down {
+      background-color: #fee2e2;
+      color: #dc2626;
+    }
+
+    .price-stable {
+      background-color: #f3f4f6;
+      color: #4b5563;
+    }
+
+    .dashboard-card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      padding: 1.5rem;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+    }
+
+    .action-button {
+      background: var(--primary-color);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 0.75rem;
+      transition: all 0.3s ease;
+      font-size: 1.125rem;
+    }
+    
+    .action-button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--secondary-color);
+      color: white;
+      border-radius: 50%;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    .sidebar {
+      background: white;
+      border-right: 1px solid #e5e7eb;
+      height: 100vh;
+      position: fixed;
+      width: 280px;
+      padding: 1.5rem;
+    }
+
+    .main-content {
+      margin-left: 280px;
+      padding: 2rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item:hover {
+      background: #f3f4f6;
+    }
+
+    .nav-item.active {
+      background: #ecfdf5;
+      color: var(--primary-color);
+    }
+
+    .nav-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.75rem;
+      margin-right: 1rem;
+      font-size: 1.25rem;
+    }
+
+    /* Weather Widget Styles */
+    .weather-widget {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .weather-widget::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    }
+
+    .weather-alert {
+      background: #FFEBEE;
+      color: #D32F2F;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    .weather-alert i {
+      font-size: 1.25rem;
+    }
+
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .weather-item {
+      background: #f3f4f6;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .weather-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .weather-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .weather-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+
+    .weather-label {
+      font-size: 0.875rem;
+      color: #4b5563;
+      opacity: 0.7;
+    }
+
+    .weather-forecast {
+      margin-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 1.5rem;
+    }
+
+    .forecast-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px dashed #e5e7eb;
+    }
+
+    .forecast-item:last-child {
+      border-bottom: none;
+    }
+
+    .forecast-day {
+      font-weight: 500;
+    }
+
+    .forecast-temp {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .forecast-high {
+      color: #F44336;
+    }
+
+    .forecast-low {
+      color: #2196F3;
+    }
+
+    .crop-status {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+
+    .crop-status.good {
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    .crop-status.warning {
+      background: #FFF8E1;
+      color: #F57F17;
+    }
+
+    .crop-status.danger {
+      background: #FFEBEE;
+      color: #D32F2F;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body x-data="{ 
+  mobileMenuOpen: false,
+  activeTab: 'dashboard',
+  notifications: 3,
+  language: 'tamil',
+  isRecording: false,
+  priceTrends: {
+    tomatoes: { price: 45, trend: 'up', change: 5 },
+    onions: { price: 30, trend: 'down', change: 2 },
+    eggplant: { price: 25, trend: 'stable', change: 0 }
+  },
+  startRecording() {
+    this.isRecording = true;
+    // Add voice recording logic here
+  },
+  stopRecording() {
+    this.isRecording = false;
+    // Add stop recording logic here
+  },
+  translations: {
+    tamil: {
+      dashboard: 'டாஷ்போர்டு',
+      myProducts: 'என் பொருட்கள்',
+      orders: 'ஆர்டர்கள்',
+      earnings: 'வருவாய்',
+      settings: 'அமைப்புகள்',
+      addProduct: 'புதிய பொருள் சேர்',
+      totalSales: 'மொத்த விற்பனை',
+      pendingOrders: 'நிலுவையில் உள்ள ஆர்டர்கள்',
+      totalEarnings: 'மொத்த வருவாய்',
+      recentOrders: 'சமீபத்திய ஆர்டர்கள்',
+      productName: 'பொருள் பெயர்',
+      price: 'விலை',
+      stock: 'ஸ்டாக்',
+      status: 'நிலை',
+      actions: 'செயல்கள்',
+      viewAll: 'அனைத்தையும் பார்க்க',
+      logout: 'வெளியேறு',
+      voiceUpload: 'குரல் மூலம் பதிவேற்று',
+      priceUp: 'விலை உயர்வு',
+      priceDown: 'விலை குறைவு',
+      priceStable: 'விலை நிலையானது',
+      weather: 'வானிலை',
+      temperature: 'வெப்பநிலை',
+      humidity: 'ஈரப்பதம்',
+      windSpeed: 'காற்று வேகம்',
+      rainfall: 'மழைப்பொழிவு',
+      uvIndex: 'UV குறியீடு',
+      cloudCover: 'மேக மறைப்பு',
+      agriculturalData: 'விவசாய தரவு',
+      soilMoisture: 'மண் ஈரப்பதம்',
+      soilTemp: 'மண் வெப்பநிலை',
+      cropHealth: 'பயிர் ஆரோக்கியம்',
+      good: 'நல்லது',
+      fair: 'நடுத்தரம்',
+      poor: 'மோசமானது',
+      growingSeason: 'பயிர் பருவம்',
+      kharif: 'காரிப்',
+      rabi: 'ரபி',
+      forecast: 'வானிலை முன்னறிவிப்பு',
+      today: 'இன்று',
+      tomorrow: 'நாளை',
+      dayAfter: 'நாளை மறுநாள்',
+      weatherAlert: 'நாளை மழை பொழியும் வாய்ப்பு உள்ளது! நீர் பாய்ச்சலை திட்டமிடுங்கள்.',
+      importantNotice: 'முக்கிய அறிவிப்பு',
+      priceIncrease: 'தக்காளி விலை உயர்வு',
+      priceIncreaseDesc: 'அடுத்த வாரம் தக்காளி விலை 15% உயரும் என்று எதிர்பார்க்கப்படுகிறது. இப்போது விற்பனை செய்யுங்கள்!',
+      listening: 'கேட்கிறது...',
+      marketPrices: 'சந்தை விலைகள்',
+      checkPrices: 'விலைகளை பார்க்க',
+      cropCalendar: 'பயிர் காலண்டர்',
+      voiceCommands: 'குரல் கட்டமைப்புகள்'
+    },
+    english: {
+      dashboard: 'Dashboard',
+      myProducts: 'My Products',
+      orders: 'Orders',
+      earnings: 'Earnings',
+      settings: 'Settings',
+      addProduct: 'Add Product',
+      totalSales: 'Total Sales',
+      pendingOrders: 'Pending Orders',
+      totalEarnings: 'Total Earnings',
+      recentOrders: 'Recent Orders',
+      productName: 'Product Name',
+      price: 'Price',
+      stock: 'Stock',
+      status: 'Status',
+      actions: 'Actions',
+      viewAll: 'View All',
+      logout: 'Logout',
+      voiceUpload: 'Voice Upload',
+      priceUp: 'Price Up',
+      priceDown: 'Price Down',
+      priceStable: 'Price Stable',
+      weather: 'Weather',
+      temperature: 'Temperature',
+      humidity: 'Humidity',
+      windSpeed: 'Wind Speed',
+      rainfall: 'Rainfall',
+      uvIndex: 'UV Index',
+      cloudCover: 'Cloud Cover',
+      agriculturalData: 'Agricultural Data',
+      soilMoisture: 'Soil Moisture',
+      soilTemp: 'Soil Temperature',
+      cropHealth: 'Crop Health',
+      good: 'Good',
+      fair: 'Fair',
+      poor: 'Poor',
+      growingSeason: 'Growing Season',
+      kharif: 'Kharif',
+      rabi: 'Rabi',
+      forecast: 'Weather Forecast',
+      today: 'Today',
+      tomorrow: 'Tomorrow',
+      dayAfter: 'Day After',
+      weatherAlert: 'Chance of rain tomorrow! Plan your irrigation accordingly.',
+      importantNotice: 'Important Notice',
+      priceIncrease: 'Tomato Price Increase',
+      priceIncreaseDesc: 'Tomato prices are expected to increase by 15% next week. Sell now!',
+      listening: 'Listening...',
+      marketPrices: 'Market Prices',
+      checkPrices: 'Check Prices',
+      cropCalendar: 'Crop Calendar',
+      voiceCommands: 'Voice Commands'
+    }
+  }
+}">
+  <!-- Voice Upload Button -->
+  <!-- New Voice Button (replace existing button) -->
+
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="flex items-center mb-8">
+      <div class="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-xl">
+        UC
+          </div>
+      <span class="ml-3 font-bold text-xl text-gray-800">Uzhavan Connect</span>
+        </div>
+
+   <nav class="space-y-2">
+  <!-- Dashboard -->
+  <a href="#" 
+     class="nav-item" 
+     style="background-color: #ffffff; color: #4CAF50; border-left: 4px solid #4CAF50;"
+     @click.prevent="window.location.href='dashboard.html'"
+     @mouseover="this.style.backgroundColor='#1a1a1a'; this.style.color='#66BB6A';"
+     @mouseout="this.style.backgroundColor='#000'; this.style.color='#4CAF50';">
+    <div class="nav-icon">
+      <i class="fas fa-home" style="color: #4CAF50;"></i>
+    </div>
+    <span x-text="translations[language].dashboard"></span>
+  </a>
+
+  <!-- Products -->
+  <a href="#"
+     class="nav-item" 
+     style="background-color: #ffffff; color: #4CAF50; border-left: 4px solid #4CAF50;"
+     @click.prevent="window.location.href='products.html'"
+     @mouseover="this.style.backgroundColor='#1a1a1a'; this.style.color='#66BB6A';"
+     @mouseout="this.style.backgroundColor='#000'; this.style.color='#4CAF50';">
+    <div class="nav-icon">
+      <i class="fas fa-box" style="color: #4CAF50;"></i>
+    </div>
+    <span x-text="translations[language].myProducts"></span>
+  </a>
+
+  <!-- Orders -->
+  <a href="#"
+     class="nav-item" 
+     style="background-color: #ffffff; color: #4CAF50; border-left: 4px solid #4CAF50;"
+     @click.prevent="window.location.href='orders.html'"
+     @mouseover="this.style.backgroundColor='#1a1a1a'; this.style.color='#66BB6A';"
+     @mouseout="this.style.backgroundColor='#000'; this.style.color='#4CAF50';">
+    <div class="nav-icon">
+      <i class="fas fa-shopping-cart" style="color: #4CAF50;"></i>
+    </div>
+    <span x-text="translations[language].orders"></span>
+    <span class="notification-badge" x-show="notifications > 0" x-text="notifications"></span>
+  </a>
+
+  <!-- Earnings -->
+  <a href="#"
+     class="nav-item" 
+     style="background-color: #ffffff; color: #4CAF50; border-left: 4px solid #4CAF50;"
+     @click.prevent="window.location.href='earnings.html'"
+     @mouseover="this.style.backgroundColor='#1a1a1a'; this.style.color='#66BB6A';"
+     @mouseout="this.style.backgroundColor='#000'; this.style.color='#4CAF50';">
+    <div class="nav-icon">
+      <i class="fas fa-wallet" style="color: #4CAF50;"></i>
+    </div>
+    <span x-text="translations[language].earnings"></span>
+  </a>
+
+  <!-- Settings -->
+  <a href="#"
+     class="nav-item" 
+     style="background-color: #ffffff; color: #4CAF50; border-left: 4px solid #4CAF50;"
+     @click.prevent="window.location.href='settings.html'"
+     @mouseover="this.style.backgroundColor='#1a1a1a'; this.style.color='#66BB6A';"
+     @mouseout="this.style.backgroundColor='#000'; this.style.color='#4CAF50';">
+    <div class="nav-icon">
+      <i class="fas fa-cog" style="color: #4CAF50;"></i>
+    </div>
+    <span x-text="translations[language].settings"></span>
+  </a>
+
+  <!-- Nabard -->
+  <a href="#"
+     class="nav-item" 
+     style="background-color: #ffffff; color: #4CAF50; border-left: 4px solid #4CAF50;"
+     @click.prevent="window.location.href='nabard.html'"
+     @mouseover="this.style.backgroundColor='#1a1a1a'; this.style.color='#66BB6A';"
+     @mouseout="this.style.backgroundColor='#000'; this.style.color='#4CAF50';">
+    <div class="nav-icon">
+      <i class="fas fa-seedling" style="color: #4CAF50;"></i>
+    </div>
+    <span>Nabard</span>
+  </a>
+
+  <!-- Fertilizer -->
+  <a href="#"
+     class="nav-item" 
+     style="background-color: #ffffff; color: #4CAF50; border-left: 4px solid #4CAF50;"
+     @click.prevent="window.location.href='/Fertilizer/fertilizer.html'"
+     @mouseover="this.style.backgroundColor='#1a1a1a'; this.style.color='#66BB6A';"
+     @mouseout="this.style.backgroundColor='#000'; this.style.color='#4CAF50';">
+    <div class="nav-icon">
+      <i class="fas fa-seedling" style="color: #4CAF50;"></i>
+    </div>
+    <span>Fertilizer</span>
+  </a>
+
+  <!-- Loan -->
+  <a href="#"
+     class="nav-item" 
+     style="background-color: #ffffff; color: #4CAF50; border-left: 4px solid #4CAF50;"
+     @click.prevent="window.location.href='/loan.html'"
+     @mouseover="this.style.backgroundColor='#1a1a1a'; this.style.color='#66BB6A';"
+     @mouseout="this.style.backgroundColor='#000'; this.style.color='#4CAF50';">
+    <div class="nav-icon">
+      <i class="fas fa-seedling" style="color: #4CAF50;"></i>
+    </div>
+    <span>Loan</span>
+  </a>
+</nav>
+
+    <div class="absolute bottom-4 left-4 right-4">
+      <button class="w-full action-button flex items-center justify-center">
+        <i class="fas fa-sign-out-alt mr-2"></i>
+        <span x-text="translations[language].logout"></span>
+            </button>
+          </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Header -->
+    <header class="flex justify-between items-center mb-8">
+      <h1 class="text-2xl font-bold text-gray-800" x-text="translations[language].dashboard"></h1>
+      <div class="flex items-center space-x-4">
+        <button class="giant-button action-button">
+          <i class="fas fa-plus"></i>
+          <span x-text="translations[language].addProduct"></span>
+            </button>
+        <select x-model="language" class="border rounded-lg px-3 py-2">
+          <option value="tamil">தமிழ்</option>
+          <option value="english">English</option>
+        </select>
+          </div>
+    </header>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="stat-card">
+        <h3 class="text-lg font-medium mb-2" x-text="translations[language].totalSales"></h3>
+        <p class="text-3xl font-bold">₹45,000</p>
+        <p class="text-sm opacity-75">+12% from last month</p>
+            </div>
+      <div class="stat-card" style="background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));">
+        <h3 class="text-lg font-medium mb-2" x-text="translations[language].pendingOrders"></h3>
+        <p class="text-3xl font-bold">8</p>
+        <p class="text-sm opacity-75">3 new today</p>
+            </div>
+      <div class="stat-card">
+        <h3 class="text-lg font-medium mb-2" x-text="translations[language].totalEarnings"></h3>
+        <p class="text-3xl font-bold">₹1,25,000</p>
+        <p class="text-sm opacity-75">+8% from last month</p>
+          </div>
+        </div>
+        
+    <!-- Weather Widget -->
+    <div class="weather-widget mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold" x-text="translations[language].weather"></h3>
+        <button class="text-primary-color" @click="navigateToVoicePage">
+          <i class="fas fa-microphone"></i>
+        </button>
+      </div>
+    </div>
+      <!-- Weather Alert -->
+      <div class="weather-alert">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span x-text="translations[language].weatherAlert"></span>
+            </div>
+            
+      <div class="weather-grid">
+        <div class="weather-item">
+          <i class="fas fa-sun weather-icon text-yellow-500"></i>
+          <div class="weather-value">32°C</div>
+          <div class="weather-label" x-text="translations[language].temperature"></div>
+              </div>
+        <div class="weather-item">
+          <i class="fas fa-cloud-rain weather-icon text-blue-500"></i>
+          <div class="weather-value">60%</div>
+          <div class="weather-label" x-text="translations[language].humidity"></div>
+              </div>
+        <div class="weather-item">
+          <i class="fas fa-wind weather-icon text-gray-500"></i>
+          <div class="weather-value">12 km/h</div>
+          <div class="weather-label" x-text="translations[language].windSpeed"></div>
+            </div>
+        <div class="weather-item">
+          <i class="fas fa-tint weather-icon text-blue-300"></i>
+          <div class="weather-value">0 mm</div>
+          <div class="weather-label" x-text="translations[language].rainfall"></div>
+              </div>
+        <div class="weather-item">
+          <i class="fas fa-sun weather-icon text-orange-500"></i>
+          <div class="weather-value">8.5</div>
+          <div class="weather-label" x-text="translations[language].uvIndex"></div>
+              </div>
+        <div class="weather-item">
+          <i class="fas fa-cloud weather-icon text-gray-400"></i>
+          <div class="weather-value">25%</div>
+          <div class="weather-label" x-text="translations[language].cloudCover"></div>
+          </div>
+        </div>
+        
+      <!-- Agricultural Data -->
+      <div class="mt-4 p-3 bg-green-50 rounded-lg">
+        <h4 class="font-semibold text-green-800 mb-2" x-text="translations[language].agriculturalData"></h4>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="flex items-center">
+            <i class="fas fa-seedling text-green-600 mr-2"></i>
+            <span class="text-sm" x-text="translations[language].soilMoisture"></span>
+            <span class="ml-auto font-medium">45%</span>
+            </div>
+          <div class="flex items-center">
+            <i class="fas fa-temperature-high text-red-500 mr-2"></i>
+            <span class="text-sm" x-text="translations[language].soilTemp"></span>
+            <span class="ml-auto font-medium">28°C</span>
+                </div>
+          <div class="flex items-center">
+            <i class="fas fa-leaf text-green-500 mr-2"></i>
+            <span class="text-sm" x-text="translations[language].cropHealth"></span>
+            <span class="ml-auto font-medium crop-status good" x-text="translations[language].good"></span>
+                </div>
+          <div class="flex items-center">
+            <i class="fas fa-calendar-alt text-blue-500 mr-2"></i>
+            <span class="text-sm" x-text="translations[language].growingSeason"></span>
+            <span class="ml-auto font-medium" x-text="translations[language].kharif"></span>
+              </div>
+                </div>
+              </div>
+              
+      <!-- Weather Forecast -->
+      <div class="weather-forecast">
+        <h4 class="font-semibold mb-2" x-text="translations[language].forecast"></h4>
+        <div class="forecast-item">
+          <span class="forecast-day" x-text="translations[language].today"></span>
+          <div class="forecast-temp">
+            <span class="forecast-high">34°</span>
+            <span>/</span>
+            <span class="forecast-low">22°</span>
+                </div>
+                </div>
+        <div class="forecast-item">
+          <span class="forecast-day" x-text="translations[language].tomorrow"></span>
+          <div class="forecast-temp">
+            <span class="forecast-high">32°</span>
+            <span>/</span>
+            <span class="forecast-low">21°</span>
+              </div>
+            </div>
+        <div class="forecast-item">
+          <span class="forecast-day" x-text="translations[language].dayAfter"></span>
+          <div class="forecast-temp">
+            <span class="forecast-high">30°</span>
+            <span>/</span>
+            <span class="forecast-low">20°</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Grid with Price Indicators -->
+    <div class="product-grid mb-8">
+      <div class="product-card">
+        <img src="/images/tomato.jpeg" alt="Tomatoes" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <h3 class="font-semibold mb-2">தக்காளி</h3>
+          <div class="price-indicator" :class="{
+            'price-up': priceTrends.tomatoes.trend === 'up',
+            'price-down': priceTrends.tomatoes.trend === 'down',
+            'price-stable': priceTrends.tomatoes.trend === 'stable'
+          }">
+            <span>₹50/kg</span>
+            <i :class="{
+              'fas fa-arrow-up': priceTrends.tomatoes.trend === 'up',
+              'fas fa-arrow-down': priceTrends.tomatoes.trend === 'down',
+              'fas fa-equals': priceTrends.tomatoes.trend === 'stable'
+            }"></i>
+            <span x-text="priceTrends.tomatoes.change + '%'"></span>
+    </div>
+          <div class="mt-4 flex justify-between items-center">
+            <span class="text-sm text-gray-500">50 kg available</span>
+            <button class="action-button text-sm">Update Stock</button>
+            </div>
+          </div>
+          </div>
+      <!-- Add more product cards with similar structure -->
+        </div>
+        
+        
+        <!-- Recent Orders -->
+    <div class="dashboard-card">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-semibold" x-text="translations[language].recentOrders"></h2>
+        <a href="#" class="text-green-600 hover:text-green-700" x-text="translations[language].viewAll"></a>
+        </div>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="text-left border-b">
+              <th class="pb-3 font-medium text-gray-600" x-text="translations[language].productName"></th>
+              <th class="pb-3 font-medium text-gray-600" x-text="translations[language].price"></th>
+              <th class="pb-3 font-medium text-gray-600" x-text="translations[language].stock"></th>
+              <th class="pb-3 font-medium text-gray-600" x-text="translations[language].status"></th>
+              <th class="pb-3 font-medium text-gray-600" x-text="translations[language].actions"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="py-4">தக்காளி</td>
+              <td>
+                <div class="price-indicator price-up">
+                  ₹45/kg <i class="fas fa-arrow-up ml-1"></i> 5%
+        </div>
+              </td>
+              <td>50 kg</td>
+              <td><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">Completed</span></td>
+              <td>
+                <button class="text-blue-600 hover:text-blue-700"><i class="fas fa-eye"></i></button>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-4">வெங்காயம்</td>
+              <td>
+                <div class="price-indicator price-down">
+                  ₹30/kg <i class="fas fa-arrow-down ml-1"></i> 2%
+        </div>
+              </td>
+              <td>75 kg</td>
+              <td><span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">Pending</span></td>
+              <td>
+                <button class="text-blue-600 hover:text-blue-700"><i class="fas fa-eye"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      </div>
+      <button 
+        class="voice-button"
+        onclick="window.location.href='voice.html'"
+        >
+        <i class="fas fa-microphone text-xl"></i>
+      </button>
+  </main>
+</body>
+</html></body>
+</html>
